@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="titles">
+        <item>title 1</item>
+        <item>title 2</item>
+        <item>title 3</item>
+        <item>title 4</item>
+        <item>title 5</item>
+        <item>title 6</item>
+        <item>title 7</item>
+        <item>title 8</item>
+        <item>title 9</item>
+        <item>title 10</item>
+        <item>title 11</item>
+        <item>title 12</item>
+        <item>title 13</item>
+    </string-array>
+    <string-array name="authors">
+        <item>author 1</item>
+        <item>author 2</item>
+        <item>author 3</item>
+        <item>author 4</item>
+        <item>author 5</item>
+        <item>author 6</item>
+        <item>author 7</item>
+        <item>author 8</item>
+        <item>author 9</item>
+        <item>author 10</item>
+        <item>author 11</item>
+        <item>author 12</item>
+        <item>author 13</item>
+    </string-array>
+    <string-array name="images">
+        <item>@drawable/outline_account_circle_24</item>
+        <item>@drawable/outline_account_circle_24</item>
+        <item>@drawable/outline_account_circle_24</item>
+        <item>@drawable/outline_account_circle_24</item>
+        <item>@drawable/outline_account_circle_24</item>
+        <item>@drawable/outline_account_circle_24</item>
+        <item>@drawable/outline_account_circle_24</item>
+        <item>@drawable/outline_account_circle_24</item>
+        <item>@drawable/outline_account_circle_24</item>
+        <item>@drawable/outline_account_circle_24</item>
+        <item>@drawable/outline_account_circle_24</item>
+        <item>@drawable/outline_account_circle_24</item>
+        <item>@drawable/outline_account_circle_24</item>
+    </string-array>
+</resources>
