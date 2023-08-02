@@ -1,20 +1,5 @@
 package com.fish.photoshare.activities;
 
-<<<<<<< Updated upstream
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-
-import com.fish.photoshare.R;
-
-public class LoginActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-    }
-=======
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -71,6 +56,4 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
     public void registerHandler(String username, String password){
         int length = password.length();
     }
-
->>>>>>> Stashed changes
 }

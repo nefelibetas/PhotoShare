@@ -26,4 +26,3 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/navigation_bottom"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
