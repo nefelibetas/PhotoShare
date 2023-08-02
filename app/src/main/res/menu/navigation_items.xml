@@ -12,4 +12,3 @@
     <item android:id="@+id/menu_user"
         android:icon="@drawable/outline_account_circle_24"
         android:title=""/>
-</menu>

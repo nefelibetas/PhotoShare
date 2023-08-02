@@ -1,23 +1,12 @@
-<<<<<<< Updated upstream
-package com.fish.photoshare;
-
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.View;
-=======
 package com.fish.photoshare.activities;
 
 import android.os.Bundle;
->>>>>>> Stashed changes
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-<<<<<<< Updated upstream
-=======
 import com.fish.photoshare.R;
->>>>>>> Stashed changes
 import com.fish.photoshare.fragments.HomeFragment;
 import com.fish.photoshare.fragments.UserFragment;
 import com.fish.photoshare.utils.ToastUtils;
@@ -60,25 +49,16 @@ public class MainActivity extends AppCompatActivity {
         homeFragment = HomeFragment.newInstance(null, null);
         userFragment = UserFragment.newInstance(null, null);
         manager.beginTransaction()
-<<<<<<< Updated upstream
-                .add(R.id.fragment_container, homeFragment)
-=======
                 .add(R.id.home_fragment_container, homeFragment)
->>>>>>> Stashed changes
                 .commit();
     }
 
     public boolean replaceFragment(Fragment fragment, int itemId) {
         if (fragment != null) {
             manager.beginTransaction()
-<<<<<<< Updated upstream
-                    .replace(R.id.fragment_container, fragment)
-=======
                     .replace(R.id.home_fragment_container, fragment)
->>>>>>> Stashed changes
                     .commit();
             return true;
         }
         return false;
     }
-}

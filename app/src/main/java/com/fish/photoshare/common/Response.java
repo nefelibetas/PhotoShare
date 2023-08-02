@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-package com.fish.photoshare.common;public class Response {
-=======
 package com.fish.photoshare.common;
 
 public class Response <T> {
@@ -35,5 +32,4 @@ public class Response <T> {
                 ", data=" + data +
                 '}';
     }
->>>>>>> Stashed changes
 }

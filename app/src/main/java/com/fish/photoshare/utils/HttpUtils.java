@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-package com.fish.photoshare.utils;public class HttpUtils {
-=======
 package com.fish.photoshare.utils;
 
 import java.util.HashMap;
@@ -24,5 +21,4 @@ public class HttpUtils {
                 .add("Content-Type", "application/json")
                 .build();
     }
->>>>>>> Stashed changes
 }
