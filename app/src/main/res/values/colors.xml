@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
@@ -5,4 +6,13 @@
     <color name="gray">#E6E6E6</color>
     <color name="transparent">#00000000</color>
     <color name="prompt">#555555</color>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="gray">#E6E6E6</color>
+    <color name="transparent">#00000000</color>
+    <color name="prompt">#555555</color>
+>>>>>>> Stashed changes
 </resources>

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="CircleImage">
@@ -6,3 +7,13 @@
     </style>
 </resources>
 
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CircleImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+</resources>
+
+>>>>>>> Stashed changes
