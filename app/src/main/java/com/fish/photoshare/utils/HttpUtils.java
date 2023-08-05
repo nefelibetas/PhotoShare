@@ -2,8 +2,11 @@ package com.fish.photoshare.utils;
 
 import android.os.NetworkOnMainThreadException;
 
+import com.fish.photoshare.common.Result;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -21,7 +24,8 @@ public class HttpUtils {
     private static MediaType MEDIA_TYPE_JSON;
     private static OkHttpClient client;
     private static Headers headers;
-    private static Gson gson;
+    public static Gson gson;
+    public static Type jsonType;
     static {
         client = new OkHttpClient.Builder()
                 .readTimeout(TIMEOUT, TimeUnit.SECONDS)
@@ -36,16 +40,29 @@ public class HttpUtils {
                 .add("Content-Type", "application/json")
                 .build();
         MEDIA_TYPE_JSON = MediaType.Companion.parse("application/json; charset=utf-8");
+        jsonType = new TypeToken<Result<Object>>(){}.getType();
+    }
+    public static String getRequestHandler(String url, HashMap<String, String> params ) {
+        StringBuffer getUrl = new StringBuffer(url);
+        getUrl.append("?");
+        StringBuffer sb = new StringBuffer();
+        for (String key : params.keySet()) {
+            sb.append(key);
+            sb.append("=");
+            sb.append(params.get(key));
+            sb.append("&");
+        }
+        if (sb.lastIndexOf("&") == sb.length()) {
+            sb.setLength(sb.length() - 1);
+        }
+        getUrl.append(sb);
+        return getUrl.toString();
     }
     public static void sendGetRequest(String url, HashMap<String, String> params, Callback callback) {
         new Thread(()->{
-            StringBuffer stringBuffer = new StringBuffer(url);
-            stringBuffer.append("?");
-            for (String key : params.keySet()) {
-                stringBuffer.append(key + "=" + params.get(key));
-            }
+            String getUrl = getRequestHandler(url, params);
             Request request = new Request.Builder()
-                    .url(url)
+                    .url(getUrl)
                     .headers(headers)
                     .get()
                     .build();
