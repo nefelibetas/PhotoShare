@@ -18,14 +18,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 public class HttpUtils {
-    private static final String APPID = "d4be705c704c434c868938cc000d5d61";
+    public static final String APPID = "d4be705c704c434c868938cc000d5d61";
     private static final String APPSECRET = "489343d4c32945471492e945cdfe9833caf7f";
     private static final int TIMEOUT = 120;
     private static MediaType MEDIA_TYPE_JSON;
     private static OkHttpClient client;
     private static Headers headers;
     public static Gson gson;
-    public static Type jsonType;
     static {
         client = new OkHttpClient.Builder()
                 .readTimeout(TIMEOUT, TimeUnit.SECONDS)
@@ -40,7 +39,6 @@ public class HttpUtils {
                 .add("Content-Type", "application/json")
                 .build();
         MEDIA_TYPE_JSON = MediaType.Companion.parse("application/json; charset=utf-8");
-        jsonType = new TypeToken<Result<Object>>(){}.getType();
     }
     public static String getRequestHandler(String url, HashMap<String, String> params ) {
         StringBuffer getUrl = new StringBuffer(url);
@@ -65,6 +63,20 @@ public class HttpUtils {
                     .url(getUrl)
                     .headers(headers)
                     .get()
+                    .build();
+            try {
+                client.newCall(request).enqueue(callback);
+            } catch (NetworkOnMainThreadException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public static void getImageResources(String url, Callback callback) {
+        new Thread(()->{
+            Request request = new Request.Builder()
+                    .headers(headers)
+                    .url(url)
                     .build();
             try {
                 client.newCall(request).enqueue(callback);

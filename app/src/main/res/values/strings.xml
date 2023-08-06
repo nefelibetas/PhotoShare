@@ -15,9 +15,14 @@
     <string name="invalid_password">密码必须大于5位数</string>
     <string name="login_failed">"登陆失败"</string>
 
+    <!-- userKey -->
     <string name="shared_preferences_file_name">sp_user_information</string>
     <string name="user_name">username</string>
     <string name="user_password">user_password</string>
-    <string name="user_remember_password">user_remember_password</string>
-
+    <string name="user_avatar">user_avatar</string>
+    <string name="user_id">user_id</string>
+    <string name="user_sex">user_sex</string>
+    <string name="user_introduce">user_introduce</string>
+    <string name="user_createTime">user_createTime</string>
+    <string name="user_lastUpdateTime">user_lastUpdateTime</string>
 </resources>

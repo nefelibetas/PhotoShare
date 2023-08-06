@@ -1,6 +1,7 @@
 package com.fish.photoshare.common;
 
 public final class Api {
+    public static final String BASIC_URL = "http://47.107.52.7:88";
     // post：创建用户
     public static final String REGISTER = "http://47.107.52.7:88/member/photo/user/register";
 

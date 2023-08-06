@@ -1,6 +1,6 @@
 package com.fish.photoshare.common;
 
-public class Result<T> {
+public class Result <T> {
     private int code;
     private String msg;
     private T data;

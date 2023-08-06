@@ -10,12 +10,12 @@ public class User {
     private String sex;
     private String introduce;
     private String avatar;
-    private Date createTime;
-    private Date lastUpdateTime;
+    private String createTime;
+    private String lastUpdateTime;
 
     public User() {}
 
-    public User(String id, String appKey, String username, String password, String sex, String introduce, String avatar, Date createTime, Date lastUpdateTime) {
+    public User(String id, String appKey, String username, String password, String sex, String introduce, String avatar, String createTime, String lastUpdateTime) {
         this.id = id;
         this.appKey = appKey;
         this.username = username;
@@ -83,19 +83,20 @@ public class User {
         this.avatar = avatar;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Date getLastUpdateTime() {
+    public String getLastUpdateTime() {
         return lastUpdateTime;
     }
 
-    public void setLastUpdateTime(Date lastUpdateTime) {
+    public void setLastUpdateTime(String lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
     }
+
 }
