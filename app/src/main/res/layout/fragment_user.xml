@@ -43,7 +43,7 @@
     <!-- 其他选项 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         android:orientation="vertical">
 
@@ -51,9 +51,8 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/editCard"
             android:layout_width="match_parent"
-            android:layout_marginTop="8dp"
             android:layout_height="75dp"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="0dp"
             app:strokeWidth="2dp"
             app:strokeColor="@color/transparent"
             app:cardElevation="4dp"
@@ -88,14 +87,12 @@
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
         <!-- 第二个 -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/starCard"
             android:layout_width="match_parent"
-            android:layout_marginTop="8dp"
             android:layout_height="75dp"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="0dp"
             app:strokeWidth="2dp"
             app:strokeColor="@color/transparent"
             app:cardElevation="4dp"
@@ -130,14 +127,12 @@
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
         <!-- 第三个 -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/settingCard"
             android:layout_width="match_parent"
-            android:layout_marginTop="8dp"
             android:layout_height="75dp"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="0dp"
             app:strokeWidth="2dp"
             app:strokeColor="@color/transparent"
             app:cardElevation="4dp"
@@ -172,6 +167,5 @@
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
     </LinearLayout>
 </LinearLayout>

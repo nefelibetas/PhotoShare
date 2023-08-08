@@ -140,6 +140,7 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
                             SharedPreferencesUtils.remove(EntranceActivity.this, lastUpdateTimeKey);
                         }
                         startActivity(intent);
+                        finish();
                     }
                 }
             }
@@ -160,7 +161,7 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()) {
                         String body = response.body().string();
-                        Result<Object> res = HttpUtils.gson.fromJson(body, Result.class);
+                        Result<Object> res = HttpUtils.gson.fromJson(body, new TypeToken<Result<Object>>(){}.getType());
                         Log.d("fishCat", "register onResponse data: " + res);
                         if (res.getCode() == 500) {
                             ToastUtils.show(EntranceActivity.this, res.getMsg());

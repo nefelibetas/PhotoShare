@@ -1,5 +1,6 @@
 package com.fish.photoshare.fragments;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fish.photoshare.R;
+import com.fish.photoshare.activities.MainActivity;
+import com.fish.photoshare.activities.UserInformationActivity;
 import com.fish.photoshare.common.Api;
 import com.fish.photoshare.pojo.User;
 import com.fish.photoshare.utils.HttpUtils;
@@ -118,14 +121,16 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        String msg = null;
         if (id == R.id.editCard) {
-            msg = "修改信息";
+            Intent intent = new Intent(getActivity(), UserInformationActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("information", information);
+            intent.putExtras(bundle);
+            startActivity(intent);
         } else if (id == R.id.starCard) {
-            msg = "收藏页面";
+
         } else if (id == R.id.settingCard) {
-            msg = "设置界面";
+
         }
-        ToastUtils.show(getContext(), msg);
     }
 }
