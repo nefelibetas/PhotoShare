@@ -94,6 +94,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
 
     private void dataHandler() {
         if (information != null) {
+            Log.d("fishCat", "dataHandler: " + information);
             username.setText(information.getUsername());
             if (information.getAvatar() == null) {
                 avatar.setImageResource(R.drawable.ic_launcher_background);

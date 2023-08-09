@@ -100,4 +100,18 @@ public class User implements Serializable {
         this.lastUpdateTime = lastUpdateTime;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", appKey='" + appKey + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", sex='" + sex + '\'' +
+                ", introduce='" + introduce + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", lastUpdateTime='" + lastUpdateTime + '\'' +
+                '}';
+    }
 }
