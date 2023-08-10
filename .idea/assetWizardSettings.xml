@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$PROJECT_DIR$/../../../environment/SDKs/icons/material/materialicons/arrow_back/baseline_arrow_back_24.xml" />
+                                      <entry key="url" value="file:/$PROJECT_DIR$/../../../environment/SDKs/icons/material/materialicons/male/baseline_male_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,8 +33,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="585858" />
-                            <entry key="outputName" value="baseline_arrow_back_24" />
+                            <entry key="color" value="85c4fa" />
+                            <entry key="outputName" value="baseline_male_24" />
                             <entry key="sourceFile" value="D:\Code\Android\PhotoShare" />
                           </map>
                         </option>
