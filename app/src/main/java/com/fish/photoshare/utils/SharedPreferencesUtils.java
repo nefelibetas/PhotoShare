@@ -3,11 +3,16 @@ package com.fish.photoshare.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
+import com.fish.photoshare.R;
+import com.fish.photoshare.activities.MainActivity;
+import com.fish.photoshare.pojo.User;
 
 public class SharedPreferencesUtils {
 
     private static final String PREFERENCES_NAME = "sp_user_information";
-
+    private static ResourcesUtils resourcesUtils;
     // 保存字符串
     public static void saveString(Context context, String key, String value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -64,5 +69,21 @@ public class SharedPreferencesUtils {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
+    }
+    // 从SharedPreferences中读取全部数据并整合成User对象返回
+    public static User getUser(Context context) {
+        resourcesUtils = new ResourcesUtils(context);
+        // value
+        String userId = SharedPreferencesUtils.getString(context, resourcesUtils.ID, null);
+        String username = SharedPreferencesUtils.getString(context, resourcesUtils.USERNAME, null);
+        String password = SharedPreferencesUtils.getString(context, resourcesUtils.PASSWORD, null);
+        String userAvatar = SharedPreferencesUtils.getString(context, resourcesUtils.AVATAR, null);
+        String userIntroduce = SharedPreferencesUtils.getString(context, resourcesUtils.INTRODUCE, null);
+        String userSex = SharedPreferencesUtils.getString(context, resourcesUtils.SEX, null);
+        String userCreateTime = SharedPreferencesUtils.getString(context, resourcesUtils.CREATE_TIME, null);
+        String userLastUpdateTime = SharedPreferencesUtils.getString(context, resourcesUtils.LAST_UPDATE_TIME, null);
+        // 构造user,传递给UserFragment, 然后渲染
+        User user = new User(userId, HttpUtils.APPID, username, password, userSex, userIntroduce, userAvatar, userCreateTime, userLastUpdateTime);
+        return user;
     }
 }

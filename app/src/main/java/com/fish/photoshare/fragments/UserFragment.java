@@ -57,29 +57,24 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     public static UserFragment newInstance(User information) {
         UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
-        args.putString(USER_INFORMATION, HttpUtils.gson.toJson(information));
+        args.putSerializable(USER_INFORMATION, information);
         fragment.setArguments(args);
         return fragment;
     }
-
     public UserFragment() {}
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            String info = getArguments().getString(USER_INFORMATION);
-            information = HttpUtils.gson.fromJson(info, User.class);
+            information = getArguments().getSerializable(USER_INFORMATION, User.class);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_user, container, false);
         initView(rootView);
         return rootView;
     }
-
     private void initView(View rootView) {
         editCard = rootView.findViewById(R.id.editCard);
         starCard = rootView.findViewById(R.id.starCard);
@@ -91,7 +86,6 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         settingCard.setOnClickListener(this);
         dataHandler();
     }
-
     private void dataHandler() {
         if (information != null) {
             Log.d("fishCat", "dataHandler: " + information);
@@ -118,7 +112,6 @@ public class UserFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
-
     @Override
     public void onClick(View v) {
         int id = v.getId();

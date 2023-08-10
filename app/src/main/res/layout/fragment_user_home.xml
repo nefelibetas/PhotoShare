@@ -27,6 +27,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginEnd="40dp"
+                android:scaleType="fitCenter"
                 android:layout_gravity="end|center_vertical"
                 app:shapeAppearance="@style/CircleImage"
                 android:src="@drawable/ic_launcher_background"/>
@@ -98,8 +99,7 @@
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginEnd="50dp"
                 android:textSize="20sp"
-                android:text="性别"
-                android:clickable="true"/>
+                android:text="性别" />
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
