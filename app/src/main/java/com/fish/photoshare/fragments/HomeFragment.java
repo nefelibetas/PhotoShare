@@ -1,16 +1,15 @@
 package com.fish.photoshare.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fish.photoshare.pojo.Post;
+import androidx.fragment.app.Fragment;
+
 import com.fish.photoshare.R;
 import com.fish.photoshare.adapter.HomeAdapter;
+import com.fish.photoshare.pojo.Post;
 
 import java.util.ArrayList;
 

@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.fish.photoshare.R;
-import com.fish.photoshare.common.UserCallBackHandler;
+import com.fish.photoshare.common.CallBackHandler;
 import com.fish.photoshare.fragments.HomeFragment;
 import com.fish.photoshare.fragments.UserFragment;
 import com.fish.photoshare.pojo.User;
@@ -17,12 +17,11 @@ import com.fish.photoshare.utils.ToastUtils;
 import com.fish.photoshare.utils.UserStateUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements UserCallBackHandler {
+public class MainActivity extends AppCompatActivity implements CallBackHandler {
     private BottomNavigationView mNavigationView;
     private FragmentManager manager;
     private HomeFragment homeFragment;
     private UserFragment userFragment;
-    private User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +29,6 @@ public class MainActivity extends AppCompatActivity implements UserCallBackHandl
         changeActivityHandler();
         initHomeFragment();
         initNavigation();
-        Bundle bundle = getIntent().getExtras();
-        initUserFragment(bundle);
     }
     private void initNavigation() {
         mNavigationView = findViewById(R.id.navigation_bottom);
@@ -49,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements UserCallBackHandl
             return false;
         });
     }
-
     private void initHomeFragment() {
         manager = getSupportFragmentManager();
         homeFragment = HomeFragment.newInstance(null, null);
@@ -57,18 +53,10 @@ public class MainActivity extends AppCompatActivity implements UserCallBackHandl
                 .add(R.id.home_fragment_container, homeFragment)
                 .commit();
     }
-
-    public void initUserFragment(Bundle bundle) {
-        if (bundle != null) {
-            User user = bundle.getSerializable("loginResult", User.class);
-            userFragment = UserFragment.newInstance(user);
-        }
-    }
-
     private void changeActivityHandler() {
         String userIdKey = getResources().getString(R.string.user_id);
-        // 如果在本地已经保存有用户的信息了，那就使用保存的信息渲染UserFragment
-        user = SharedPreferencesUtils.getUser(MainActivity.this);
+        // 如果在本地已经保存有用户的信息,则进行校验
+        User user = SharedPreferencesUtils.getUser(MainActivity.this);
         // 用userId判断登陆状态
         String userId = SharedPreferencesUtils.getString(MainActivity.this, userIdKey, null);
         if (userId != null && !userId.equals("")) {
@@ -77,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements UserCallBackHandl
         } else {
             Intent intent = new Intent(MainActivity.this, EntranceActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -91,11 +80,14 @@ public class MainActivity extends AppCompatActivity implements UserCallBackHandl
     }
     @Override
     public void onHandleSuccess() {
-        userFragment = UserFragment.newInstance(user);
+        // 校验成功则生成Fragment
+        userFragment = UserFragment.newInstance();
     }
     @Override
     public void onHandleFailure() {
+        // 校验不成功跳转到登陆注册页面
         Intent intent = new Intent(MainActivity.this, EntranceActivity.class);
         startActivity(intent);
+        finish();
     }
 }

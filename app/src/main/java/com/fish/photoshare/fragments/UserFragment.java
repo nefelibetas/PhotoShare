@@ -1,33 +1,30 @@
 package com.fish.photoshare.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.fish.photoshare.R;
-import com.fish.photoshare.activities.MainActivity;
 import com.fish.photoshare.activities.UserInformationActivity;
 import com.fish.photoshare.common.Api;
 import com.fish.photoshare.pojo.User;
 import com.fish.photoshare.utils.HttpUtils;
-import com.fish.photoshare.utils.ToastUtils;
+import com.fish.photoshare.utils.SharedPreferencesUtils;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
-import java.util.HashMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -47,32 +44,39 @@ import okhttp3.Response;
 * */
 
 public class UserFragment extends Fragment implements View.OnClickListener {
-    private static final String USER_INFORMATION = "userInformation";
     private User information;
     private MaterialCardView editCard;
     private MaterialCardView settingCard;
     private MaterialCardView starCard;
     private TextView username;
     private ShapeableImageView avatar;
-    public static UserFragment newInstance(User information) {
+    public static UserFragment newInstance() {
         UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
-        args.putSerializable(USER_INFORMATION, information);
         fragment.setArguments(args);
         return fragment;
     }
     public UserFragment() {}
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        information = SharedPreferencesUtils.getUser(getContext());
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        information = SharedPreferencesUtils.getUser(getContext());
+        dataHandler();
+    }
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            information = getArguments().getSerializable(USER_INFORMATION, User.class);
-        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_user, container, false);
         initView(rootView);
+        dataHandler();
         return rootView;
     }
     private void initView(View rootView) {
@@ -84,13 +88,16 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         editCard.setOnClickListener(this);
         starCard.setOnClickListener(this);
         settingCard.setOnClickListener(this);
-        dataHandler();
     }
     private void dataHandler() {
+        // 初始化从本地获取并通过校验得到的数据
         if (information != null) {
-            Log.d("fishCat", "dataHandler: " + information);
-            username.setText(information.getUsername());
-            if (information.getAvatar() == null) {
+            String name = information.getUsername();
+            if (name != null && !"".equals(name)) {
+                username.setText(name);
+            }
+            String avt = information.getAvatar();
+            if (avt == null && !"".equals(avt)) {
                 avatar.setImageResource(R.drawable.ic_launcher_background);
             } else {
                 HttpUtils.getImageResources(Api.BASIC_URL, new Callback() {

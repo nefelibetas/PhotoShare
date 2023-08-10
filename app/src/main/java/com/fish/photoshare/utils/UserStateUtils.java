@@ -8,7 +8,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.fish.photoshare.common.Api;
-import com.fish.photoshare.common.UserCallBackHandler;
+import com.fish.photoshare.common.CallBackHandler;
 import com.fish.photoshare.common.Result;
 import com.fish.photoshare.pojo.User;
 import com.google.gson.reflect.TypeToken;
@@ -21,7 +21,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class UserStateUtils {
-    public static void userInformationIsOkHandler(User user, Context context, UserCallBackHandler userCallBackHandler) {
+    public static void userInformationIsOkHandler(User user, Context context, CallBackHandler userCallBackHandler) {
         String username = user.getUsername();
         String password = user.getPassword();
         HashMap<String, String> params = new HashMap<>();

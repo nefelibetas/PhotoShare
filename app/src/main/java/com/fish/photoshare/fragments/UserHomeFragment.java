@@ -2,26 +2,18 @@ package com.fish.photoshare.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.fish.photoshare.R;
 import com.fish.photoshare.common.OnFragmentChangeListener;
 import com.fish.photoshare.models.UserHomeFragmentModel;
 import com.fish.photoshare.pojo.User;
-import com.fish.photoshare.utils.ToastUtils;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.imageview.ShapeableImageView;
 
 public class UserHomeFragment extends Fragment {
     private UserHomeFragmentModel userHomeFragmentModel;
@@ -64,7 +56,7 @@ public class UserHomeFragment extends Fragment {
         // initModel
         userHomeFragmentModel = new UserHomeFragmentModel();
         userHomeFragmentModel.initModel(rootView, getContext());
-        userHomeFragmentModel.initOnClickListener(getContext(), manager, listener);
+        userHomeFragmentModel.initOnClickListener(getContext());
         userHomeFragmentModel.initData(user);
     }
 }

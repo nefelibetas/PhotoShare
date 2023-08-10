@@ -3,10 +3,7 @@ package com.fish.photoshare.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
-import com.fish.photoshare.R;
-import com.fish.photoshare.activities.MainActivity;
 import com.fish.photoshare.pojo.User;
 
 public class SharedPreferencesUtils {

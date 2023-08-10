@@ -2,11 +2,8 @@ package com.fish.photoshare.utils;
 
 import android.os.NetworkOnMainThreadException;
 
-import com.fish.photoshare.common.Result;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -17,7 +14,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-public class HttpUtils {
+public class HttpUtils <T> {
     public static final String APPID = "d4be705c704c434c868938cc000d5d61";
     private static final String APPSECRET = "489343d4c32945471492e945cdfe9833caf7f";
     private static final int TIMEOUT = 120;
@@ -86,7 +83,7 @@ public class HttpUtils {
         }).start();
     }
 
-    public static void sendPostRequest(String url, HashMap<String, String> params, Callback callback) {
+    public static <T> void sendPostRequest(String url, HashMap<String, T> params, Callback callback) {
         new Thread(()->{
             String body = gson.toJson(params);
             Request request = new Request.Builder()
