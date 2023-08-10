@@ -15,11 +15,14 @@ import android.view.View;
 import com.fish.photoshare.R;
 import com.fish.photoshare.common.Api;
 import com.fish.photoshare.common.Result;
+import com.fish.photoshare.models.EntranceModel;
 import com.fish.photoshare.pojo.User;
 import com.fish.photoshare.utils.FormatUtils;
 import com.fish.photoshare.utils.HttpUtils;
+import com.fish.photoshare.utils.ResourcesUtils;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
 import com.fish.photoshare.utils.ToastUtils;
+import com.fish.photoshare.utils.UserStateUtils;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
@@ -34,11 +37,8 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class EntranceActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextInputEditText usernameInput;
-    private TextInputEditText passwordInput;
-    private MaterialCheckBox rememberPassword;
-    private MaterialButton signInButton;
-    private MaterialButton registerButton;
+    private EntranceModel entranceModel;
+    private ResourcesUtils resourcesUtils;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,31 +47,31 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
         getSharedPreferencesData();
     }
     public void initView(){
-        usernameInput = findViewById(R.id.et_username);
-        passwordInput = findViewById(R.id.et_password);
-        rememberPassword = findViewById(R.id.mc_remember);
-        signInButton = findViewById(R.id.mb_signIn);
-        registerButton = findViewById(R.id.mb_register);
-        signInButton.setOnClickListener(this);
-        registerButton.setOnClickListener(this);
+        entranceModel = new EntranceModel();
+        resourcesUtils = new ResourcesUtils(EntranceActivity.this);
+        entranceModel.usernameInput = findViewById(R.id.et_username);
+        entranceModel.passwordInput = findViewById(R.id.et_password);
+        entranceModel.rememberPassword = findViewById(R.id.mc_remember);
+        entranceModel.signInButton = findViewById(R.id.mb_signIn);
+        entranceModel.registerButton = findViewById(R.id.mb_register);
+        entranceModel.signInButton.setOnClickListener(this);
+        entranceModel.registerButton.setOnClickListener(this);
     }
 
     private void getSharedPreferencesData() {
-        String usernameKey = getResources().getString(R.string.user_name);
-        String passwordKey = getResources().getString(R.string.user_password);
-        String username = SharedPreferencesUtils.getString(EntranceActivity.this, usernameKey, null);
-        String password = SharedPreferencesUtils.getString(EntranceActivity.this, passwordKey, null);
+        String username = SharedPreferencesUtils.getString(EntranceActivity.this, resourcesUtils.USERNAME, null);
+        String password = SharedPreferencesUtils.getString(EntranceActivity.this, resourcesUtils.PASSWORD, null);
         if ((username != null && password != null) && !TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-            usernameInput.setText(username);
-            passwordInput.setText(password);
+            entranceModel.usernameInput.setText(username);
+            entranceModel.passwordInput.setText(password);
         }
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        String  username = usernameInput.getText().toString();
-        String  password = passwordInput.getText().toString();
+        String  username = entranceModel.usernameInput.getText().toString();
+        String  password = entranceModel.passwordInput.getText().toString();
         if (username.isEmpty() || password.isEmpty()){
             ToastUtils.show(EntranceActivity.this, "输入不能为空");
             return;
@@ -90,63 +90,47 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
         HttpUtils.sendPostRequest(newUrl, null, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
                 Log.d("fishCat", "Login onFailure" + e.getMessage());
             }
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    // 从string中获取Key
-                    String userNameKey = getResources().getString(R.string.user_name);
-                    String userPasswordKey = getResources().getString(R.string.user_password);
-                    String userSexKey = getResources().getString(R.string.user_sex);
-                    String userIdKey = getResources().getString(R.string.user_id);
-                    String userAvatarKey = getResources().getString(R.string.user_avatar);
-                    String userIntroduceKey = getResources().getString(R.string.user_introduce);
-                    String createTimeKey = getResources().getString(R.string.user_createTime);
-                    String lastUpdateTimeKey = getResources().getString(R.string.user_lastUpdateTime);
                     // 将账密传到主页面，会在UserFragment渲染
                     Bundle bundle = new Bundle();
                     // 获取响应体内的数据，转化成字符串再转化成指定类型的数据
                     String body = response.body().string();
                     Result<User> result = HttpUtils.gson.fromJson(body, new TypeToken<Result<User>>(){}.getType());
                     Log.d("fishCat", "Login onResponse result data: " + result);
-                    if (result.getCode() == 500) {
+                    if (result.getCode() != 200) {
                         ToastUtils.show(EntranceActivity.this, result.getMsg());
                     } else {
                         // 获取到的数据没有异常就可以跳转到主界面，然后传递数据
                         Intent intent = new Intent(EntranceActivity.this, MainActivity.class);
-                        bundle.putString("loginResult", HttpUtils.gson.toJson(result.getData()));
+                        bundle.putSerializable("loginResult", result.getData());
                         intent.putExtras(bundle);
                         User user = result.getData();
                         // 登陆后保存登陆状态，有修改再获取数据
-                        if (rememberPassword.isChecked()) {
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, userNameKey, username);
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, userPasswordKey, password);
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, userIdKey, user.getId());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, userSexKey, user.getSex());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, userAvatarKey, user.getAvatar());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, userIntroduceKey, user.getIntroduce());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, createTimeKey, user.getCreateTime().toString());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, lastUpdateTimeKey, user.getLastUpdateTime().toString());
+                        if (entranceModel.rememberPassword.isChecked()) {
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.ID, user.getId());
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.USERNAME, username);
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.PASSWORD, password);
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.SEX, user.getSex());
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.AVATAR, user.getAvatar());
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.INTRODUCE, user.getIntroduce());
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.CREATE_TIME, user.getCreateTime().toString());
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.LAST_UPDATE_TIME, user.getLastUpdateTime().toString());
                         } else {
-                            SharedPreferencesUtils.remove(EntranceActivity.this, userNameKey);
-                            SharedPreferencesUtils.remove(EntranceActivity.this, userIdKey);
-                            SharedPreferencesUtils.remove(EntranceActivity.this, userAvatarKey);
-                            SharedPreferencesUtils.remove(EntranceActivity.this, userSexKey);
-                            SharedPreferencesUtils.remove(EntranceActivity.this, userPasswordKey);
-                            SharedPreferencesUtils.remove(EntranceActivity.this, userIntroduceKey);
-                            SharedPreferencesUtils.remove(EntranceActivity.this, createTimeKey);
-                            SharedPreferencesUtils.remove(EntranceActivity.this, lastUpdateTimeKey);
+                            SharedPreferencesUtils.clear(EntranceActivity.this);
                         }
                         startActivity(intent);
                         finish();
                     }
+                } else {
+                    Log.d("fishCat", "signInHandler onResponse: 出现问题");
                 }
             }
         });
     }
-
     private void registerHandler(String username, String password){
         if (FormatUtils.checkPassword(password)) {
             HashMap<String, String> params = new HashMap<>();
@@ -173,5 +157,4 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
             });
         }
     }
-
 }
