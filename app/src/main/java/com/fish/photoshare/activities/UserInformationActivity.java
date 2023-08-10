@@ -14,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fish.photoshare.R;
+import com.fish.photoshare.common.CrossComponentHandler;
 import com.fish.photoshare.common.OnFragmentChangeListener;
+import com.fish.photoshare.fragments.InputFragment;
 import com.fish.photoshare.fragments.UserHomeFragment;
 import com.fish.photoshare.pojo.User;
 import com.fish.photoshare.utils.ToastUtils;
@@ -30,6 +32,7 @@ public class UserInformationActivity extends AppCompatActivity implements OnFrag
     private ImageView iv_back;
     private TextView tv_title;
     private TextView tv_save;
+    private CrossComponentHandler handler;
     private User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,9 @@ public class UserInformationActivity extends AppCompatActivity implements OnFrag
         tv_save.setVisibility(View.INVISIBLE);
         // 顶部返回按钮
         iv_back = findViewById(R.id.icon_back);
+        initOnclickListener();
+    }
+    public void initOnclickListener() {
         iv_back.setOnClickListener(v -> {
             Fragment fragment = manager.findFragmentById(R.id.userFragmentContainer);
             if (fragment instanceof UserHomeFragment)
@@ -68,10 +74,19 @@ public class UserInformationActivity extends AppCompatActivity implements OnFrag
                 tv_save.setVisibility(View.INVISIBLE);
                 onFragmentChanged("修改个人信息", false);
             }
-
+        });
+        tv_save.setOnClickListener(v -> {
+            try {
+                handler.getListener().OnCrossComponentClick("update");
+                manager.beginTransaction()
+                        .replace(R.id.userFragmentContainer, userHomeFragment)
+                        .commit();
+                onFragmentChanged("修改个人信息", false);
+            } catch (Exception e) {
+                Log.e("fishCat", "initOnclickListener error: ", e);
+            }
         });
     }
-
     @Override
     public void onFragmentChanged(String title, boolean flag) {
         tv_title.setText(title);
