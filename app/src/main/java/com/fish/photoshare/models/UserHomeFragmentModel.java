@@ -1,8 +1,11 @@
 package com.fish.photoshare.models;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -13,6 +16,7 @@ import androidx.core.content.ContextCompat;
 
 import com.fish.photoshare.R;
 import com.fish.photoshare.common.Api;
+import com.fish.photoshare.common.CrossComponentListener;
 import com.fish.photoshare.common.Result;
 import com.fish.photoshare.pojo.User;
 import com.fish.photoshare.utils.HttpUtils;
@@ -63,11 +67,13 @@ public class UserHomeFragmentModel implements Serializable {
     private MaterialButton usernameConfirmButton;
     private MaterialButton introduceConfirmButton;
     private ResourcesUtils resourcesUtils;
+    private CrossComponentListener crossComponentListener;
     private Handler handler;
     private int chooseSex;
     public UserHomeFragmentModel() {}
-    public void initModel(View rootView, Context context) {
+    public void initModel(View rootView, Context context, CrossComponentListener listener) {
         // 监听器
+        crossComponentListener = listener;
         // 初始化资源Utils
         resourcesUtils = new ResourcesUtils(context);
         // 更新ui的handler
@@ -111,11 +117,14 @@ public class UserHomeFragmentModel implements Serializable {
         avatarCard.setOnClickListener(v -> {
             avatarDialog.show();
         });
+        // 使用回调函数在UserInformationActivity打开相机和相册
         cameraButton.setOnClickListener(v -> {
-
+            crossComponentListener.onOpenCamera();
+            avatarDialog.cancel();
         });
         imageButton.setOnClickListener(v -> {
-
+            crossComponentListener.onOpenGallery();
+            avatarDialog.cancel();
         });
         // 性别
         sexCard.setOnClickListener(v -> {
