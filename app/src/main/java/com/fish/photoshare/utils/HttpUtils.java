@@ -68,21 +68,6 @@ public class HttpUtils <T> {
             }
         }).start();
     }
-
-    public static void getImageResources(String url, Callback callback) {
-        new Thread(()->{
-            Request request = new Request.Builder()
-                    .headers(headers)
-                    .url(url)
-                    .build();
-            try {
-                client.newCall(request).enqueue(callback);
-            } catch (NetworkOnMainThreadException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
     public static <T> void sendPostRequest(String url, HashMap<String, T> params, Callback callback) {
         new Thread(()->{
             String body = gson.toJson(params);

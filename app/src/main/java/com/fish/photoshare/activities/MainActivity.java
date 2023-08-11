@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements CallBackHandler {
     }
     private void initHomeFragment() {
         manager = getSupportFragmentManager();
-        homeFragment = HomeFragment.newInstance(null, null);
+        homeFragment = HomeFragment.newInstance();
         manager.beginTransaction()
                 .add(R.id.home_fragment_container, homeFragment)
                 .commit();

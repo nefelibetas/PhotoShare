@@ -20,11 +20,8 @@ public class UserHomeFragment extends Fragment {
     private User user;
     private CrossComponentListener crossComponentListener;
     public UserHomeFragment() {}
-    public UserHomeFragment(CrossComponentListener listener){
-        this.crossComponentListener = listener;
-    }
-    public static UserHomeFragment newInstance(CrossComponentListener listener) {
-        UserHomeFragment fragment = new UserHomeFragment(listener);
+    public static UserHomeFragment newInstance() {
+        UserHomeFragment fragment = new UserHomeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

@@ -1,6 +1,8 @@
 package com.fish.photoshare.common;
 
+import com.google.android.material.imageview.ShapeableImageView;
+
 public interface CrossComponentListener {
-    void onOpenGallery();
-    void onOpenCamera();
+    void onOpenGallery(ShapeableImageView avatar);
+    void onOpenCamera(ShapeableImageView avatar);
 }

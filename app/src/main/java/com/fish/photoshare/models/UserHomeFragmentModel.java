@@ -3,6 +3,7 @@ package com.fish.photoshare.models;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -11,10 +12,14 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
+import com.fish.photoshare.activities.UserInformationActivity;
 import com.fish.photoshare.common.Api;
 import com.fish.photoshare.common.CrossComponentListener;
 import com.fish.photoshare.common.Result;
@@ -119,11 +124,11 @@ public class UserHomeFragmentModel implements Serializable {
         });
         // 使用回调函数在UserInformationActivity打开相机和相册
         cameraButton.setOnClickListener(v -> {
-            crossComponentListener.onOpenCamera();
+            crossComponentListener.onOpenCamera(avatar);
             avatarDialog.cancel();
         });
         imageButton.setOnClickListener(v -> {
-            crossComponentListener.onOpenGallery();
+            crossComponentListener.onOpenGallery(avatar);
             avatarDialog.cancel();
         });
         // 性别

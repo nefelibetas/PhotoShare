@@ -100,22 +100,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
             if (avt == null && !"".equals(avt)) {
                 avatar.setImageResource(R.drawable.ic_launcher_background);
             } else {
-                HttpUtils.getImageResources(Api.BASIC_URL, new Callback() {
-                    @Override
-                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                        Log.d("fishCat", "getImage onFailure: " + e.getMessage());
-                    }
-                    @Override
-                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                        if (response.isSuccessful()) {
-                            InputStream in = response.body().byteStream();
-                            Bitmap bitmap = BitmapFactory.decodeStream(in);
-                            avatar.setImageBitmap(bitmap);
-                        } else {
-                            Log.d("fishCat", "getImage onResponse failure");
-                        }
-                    }
-                });
+                // todo: 从网络获取头像
             }
         }
     }
