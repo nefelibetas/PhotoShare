@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import com.fish.photoshare.R;
 import com.fish.photoshare.common.CallBackHandler;
 import com.fish.photoshare.fragments.HomeFragment;
+import com.fish.photoshare.fragments.PublishFragment;
 import com.fish.photoshare.fragments.UserFragment;
 import com.fish.photoshare.pojo.User;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
@@ -22,11 +23,13 @@ public class MainActivity extends AppCompatActivity implements CallBackHandler {
     private FragmentManager manager;
     private HomeFragment homeFragment;
     private UserFragment userFragment;
+    private PublishFragment publishFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         changeActivityHandler();
+        publishFragment = PublishFragment.newInstance();
         initHomeFragment();
         initNavigation();
     }
@@ -37,9 +40,7 @@ public class MainActivity extends AppCompatActivity implements CallBackHandler {
             if (itemId == R.id.menu_home) {
                 return replaceFragment(homeFragment);
             } else if (itemId == R.id.menu_add) {
-                ToastUtils.show(MainActivity.this, "还没有考虑好怎么做");
-                // todo： 跳转页面到 发布新帖子
-                return true;
+                return replaceFragment(publishFragment);
             } else if (itemId == R.id.menu_user) {
                 return replaceFragment(userFragment);
             }

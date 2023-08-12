@@ -20,8 +20,11 @@ public class UserHomeFragment extends Fragment {
     private User user;
     private CrossComponentListener crossComponentListener;
     public UserHomeFragment() {}
-    public static UserHomeFragment newInstance() {
-        UserHomeFragment fragment = new UserHomeFragment();
+    public UserHomeFragment(CrossComponentListener listener) {
+        crossComponentListener = listener;
+    }
+    public static UserHomeFragment newInstance(CrossComponentListener listener) {
+        UserHomeFragment fragment = new UserHomeFragment(listener);
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -43,9 +46,9 @@ public class UserHomeFragment extends Fragment {
     }
     public void initView(View rootView) {
         // initModel
-        userHomeFragmentModel = new UserHomeFragmentModel();
-        userHomeFragmentModel.initModel(rootView, getContext(), crossComponentListener);
-        userHomeFragmentModel.initOnClickListener(getContext());
+        userHomeFragmentModel = new UserHomeFragmentModel(getContext());
+        userHomeFragmentModel.initModel(rootView, crossComponentListener);
+        userHomeFragmentModel.initOnClickListener();
         userHomeFragmentModel.initData(user);
     }
 }

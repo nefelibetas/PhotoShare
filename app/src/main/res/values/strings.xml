@@ -25,4 +25,5 @@
     <string name="user_introduce">user_introduce</string>
     <string name="user_createTime">user_createTime</string>
     <string name="user_lastUpdateTime">user_lastUpdateTime</string>
+
 </resources>

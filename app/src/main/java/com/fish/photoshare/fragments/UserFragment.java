@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
 import com.fish.photoshare.activities.UserInformationActivity;
 import com.fish.photoshare.common.Api;
@@ -29,20 +33,6 @@ import java.io.InputStream;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
-/*
-    {
-      "code": 200,
-      "msg": "成功",
-      "data": {
-        "imageCode": "1687851662531760128",
-        "imageUrlList": [
-          "https://guet-lab.oss-cn-hangzhou.aliyuncs.com/api/2023/08/05/01104271-6f79-4d73-98ec-930bc97b5413.png"
-        ]
-      }
-    }
-* */
-
 public class UserFragment extends Fragment implements View.OnClickListener {
     private User information;
     private MaterialCardView editCard;
@@ -96,11 +86,18 @@ public class UserFragment extends Fragment implements View.OnClickListener {
             if (name != null && !"".equals(name)) {
                 username.setText(name);
             }
-            String avt = information.getAvatar();
-            if (avt == null && !"".equals(avt)) {
+            String ava = information.getAvatar();
+            if (ava == null) {
                 avatar.setImageResource(R.drawable.ic_launcher_background);
             } else {
-                // todo: 从网络获取头像
+                Uri networkImageUri = Uri.parse(ava);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    Glide.with(getActivity())
+                            .load(networkImageUri)
+                            .override(125, 125)
+                            .centerCrop()
+                            .into(avatar);
+                });
             }
         }
     }

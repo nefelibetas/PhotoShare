@@ -74,9 +74,13 @@ public class UserHomeFragmentModel implements Serializable {
     private ResourcesUtils resourcesUtils;
     private CrossComponentListener crossComponentListener;
     private Handler handler;
+    private Context context;
     private int chooseSex;
     public UserHomeFragmentModel() {}
-    public void initModel(View rootView, Context context, CrossComponentListener listener) {
+    public UserHomeFragmentModel(Context mContext) {
+        this.context = mContext;
+    }
+    public void initModel(View rootView, CrossComponentListener listener) {
         // 监听器
         crossComponentListener = listener;
         // 初始化资源Utils
@@ -117,7 +121,7 @@ public class UserHomeFragmentModel implements Serializable {
         male = sexDialog.findViewById(R.id.ic_male);
         female = sexDialog.findViewById(R.id.ic_female);
     }
-    public void initOnClickListener(Context context) {
+    public void initOnClickListener() {
         // 头像
         avatarCard.setOnClickListener(v -> {
             avatarDialog.show();
@@ -141,7 +145,7 @@ public class UserHomeFragmentModel implements Serializable {
         });
         usernameConfirmButton.setOnClickListener(v -> {
             String val = usernameInput.getText().toString();
-            confirmHandler(context, "username", val);
+            confirmHandler("username", val);
         });
         // 自我介绍
         introduceCard.setOnClickListener(v -> {
@@ -149,11 +153,11 @@ public class UserHomeFragmentModel implements Serializable {
         });
         introduceConfirmButton.setOnClickListener(v -> {
             String val = introduceInput.getText().toString();
-            confirmHandler(context, "introduce", val);
+            confirmHandler("introduce", val);
         });
         // 性别对话框下面的
         sexConfirmButton.setOnClickListener(v -> {
-            confirmHandler(context, "sex", String.valueOf(chooseSex));
+            confirmHandler("sex", String.valueOf(chooseSex));
         });
         int colorTransparent = ContextCompat.getColor(context, R.color.transparent);
         int colorFemale = ContextCompat.getColor(context, R.color.female);
@@ -178,7 +182,7 @@ public class UserHomeFragmentModel implements Serializable {
         });
     }
     // 对话框的确定按钮的事件
-    public void confirmHandler(Context context, String key, String value) {
+    public void confirmHandler(String key, String value) {
         HashMap<String, String> params = new HashMap<>();
         String id = SharedPreferencesUtils.getString(context, resourcesUtils.ID, null);
         params.put("id", id);
@@ -237,7 +241,12 @@ public class UserHomeFragmentModel implements Serializable {
         if (user != null) {
             String userAvatar = user.getAvatar();
             if (userAvatar != null) {
-
+                Uri uri = Uri.parse(userAvatar);
+                Glide.with(context)
+                        .load(uri)
+                        .override(80, 80)
+                        .centerCrop()
+                        .into(avatar);
             }
             String string_username = user.getUsername();
             if (string_username != null && !string_username.equals("")) {

@@ -1,54 +1,72 @@
 package com.fish.photoshare.activities;
 
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.hardware.usb.UsbRequest;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
 import com.fish.photoshare.common.CrossComponentListener;
+import com.fish.photoshare.common.Result;
 import com.fish.photoshare.fragments.user.UserHomeFragment;
+import com.fish.photoshare.pojo.Images;
+import com.fish.photoshare.utils.MyFileUtils;
+import com.fish.photoshare.utils.HttpUtils;
 import com.fish.photoshare.utils.ResourcesUtils;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
+import com.fish.photoshare.utils.ToastUtils;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class UserInformationActivity extends AppCompatActivity implements CrossComponentListener{
     // launcher
     private ActivityResultLauncher galleryLauncher;
     private ActivityResultLauncher<Uri> cameraLauncher;
+    // 用来拿到Key的
     private ResourcesUtils resourcesUtils;
     private FragmentManager manager;
     private UserHomeFragment userHomeFragment;
+    // 用户头像，从Model传来的
     private ShapeableImageView user_avatar;
+    // 返回按钮
     private ImageView iv_back;
+    // 从本地选取的图片Uri
     private Uri ImageUri;
+    // 回调方法
+    private Callback uploadCallback;
+    private Callback updateCallback;
+    // 上传后返回的Image对象，有code和ImageList
+    private Images images;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_information);
         initView();
+        initCallBack();
         initLauncher();
-        userHomeFragment = UserHomeFragment.newInstance();
+        userHomeFragment = UserHomeFragment.newInstance(this);
         manager.beginTransaction()
                 .add(R.id.userFragmentContainer, userHomeFragment)
                 .commit();
@@ -68,42 +86,69 @@ public class UserInformationActivity extends AppCompatActivity implements CrossC
         });
     }
     public void initLauncher() {
-        // todo: 从这里得到的Uri，可以直接定位到文件，并且可以拿到网络资源，因此，从服务器上拿图片就用这个
-        // todo: 然后从本地传上的图片需要从Uri转化为File对象
-        // todo: 参数：fileList 类型为 ArrayList<File> 然后放进去，所以要做的就是把Uri转化为File
-        // todo: 然后保存在本地，每次加载就读取，用同样的方法，把UserFragment的头像一同改变
         galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
             if (result != null) {
-                String realPath = getRealPathFromUri(result);
-                File image = new File(realPath);
+                ImageUri = result;
+                File file = MyFileUtils.getFileFromUri(UserInformationActivity.this, ImageUri);
                 ArrayList<File> fileList = new ArrayList<>();
-                fileList.add(image);
-                //Glide.with(UserInformationActivity.this)
-                        //.load(result)
-                        //.override(80,80)
-                        //.centerCrop()
-                // updateAvatar(fileList);
+                fileList.add(file);
+                // 这里考虑到还有别的地方会用到上传文件和从Uri获取文件操作，因此进行封装;
+                MyFileUtils.uploadAvatar(fileList, uploadCallback);
             }
         });
         cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
             // 这里得到的是是否拍照成功的布尔值,所以定义了外部变量ImageUri接收Uri，在这里处理
-            if (result != null) {
-                String realPath = getRealPathFromUri(ImageUri);
-                File image = new File(realPath);
+            if (result) {
+                File file = MyFileUtils.getFileFromUri(UserInformationActivity.this, ImageUri);
                 ArrayList<File> fileList = new ArrayList<>();
-                fileList.add(image);
-                //Glide.with(UserInformationActivity.this)
-                        //.load(result)
-                        //.override(80,80)
-                        //.centerCrop()
-                // updateAvatar(fileList);
+                fileList.add(file);
+                MyFileUtils.uploadAvatar(fileList, uploadCallback);
             }
         });
     }
-    public void updateAvatar(ArrayList<File> fileList) {
-        HashMap<String, String> params = new HashMap<>();
-        String id = SharedPreferencesUtils.getString(UserInformationActivity.this, resourcesUtils.ID, null);
-        params.put("id", id);
+    public void initCallBack() {
+        updateCallback = new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.d("fishCat", "uploadImage onFailure: " + e.getMessage());
+            }
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String body = response.body().string();
+                    Result result = HttpUtils.gson.fromJson(body, HttpUtils.resultType);
+                    if (result.getCode() != 200) {
+                        ToastUtils.show(UserInformationActivity.this, result.getMsg());
+                    } else {
+                        String userAvatarUrl = images.getImageUrlList().get(0);
+                        Log.d("fishCat", "updateCallback onResponse: " + result.toString());
+                        SharedPreferencesUtils.saveString(UserInformationActivity.this, resourcesUtils.AVATAR, userAvatarUrl);
+                        onSuccessBindUser(userAvatarUrl);
+                    }
+                }
+            }
+        };
+        uploadCallback = new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.d("fishCat", "uploadImage onFailure: " + e.getMessage());
+            }
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String body = response.body().string();
+                    Result<Images> result = HttpUtils.gson.fromJson(body, new TypeToken<Result<Images>>(){}.getType());
+                    if (result.getCode() != 200) {
+                        ToastUtils.show(UserInformationActivity.this, result.getMsg());
+                    } else {
+                        images = result.getData();
+                        Log.d("fishCat", "uploadCallback onResponse: " + images.toString());
+                        String userAvatarUrl = images.getImageUrlList().get(0);
+                        MyFileUtils.bindUser(userAvatarUrl, updateCallback, UserInformationActivity.this);
+                    }
+                }
+            }
+        };
 
     }
     @Override
@@ -111,7 +156,7 @@ public class UserInformationActivity extends AppCompatActivity implements CrossC
         if (user_avatar == null) {
             user_avatar = avatar;
         }
-        galleryLauncher.launch("image/**");
+        galleryLauncher.launch("image/*");
     }
     @Override
     public void onOpenCamera(ShapeableImageView avatar) {
@@ -120,6 +165,17 @@ public class UserInformationActivity extends AppCompatActivity implements CrossC
         }
         cameraLauncher.launch(createImageUri());
     }
+    @Override
+    public void onSuccessBindUser(String avatarUrl) {
+        // 这里拿到网络Uri
+        Uri networkImageUri = Uri.parse(avatarUrl);
+        // 通过模拟主线程来修改UI
+        new Handler(Looper.getMainLooper()).post(() -> Glide.with(UserInformationActivity.this)
+                .load(networkImageUri)
+                .override(80, 80)
+                .centerCrop()
+                .into(user_avatar));
+    }
     private Uri createImageUri() {
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmm", Locale.getDefault()).format(new Date());
         String imageFileName = "IMG_" + timeStamp + ".jpg";
@@ -127,15 +183,5 @@ public class UserInformationActivity extends AppCompatActivity implements CrossC
         values.put(MediaStore.Images.Media.TITLE, imageFileName);
         ImageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         return ImageUri;
-    }
-    // 通过Uri查询真实路径
-    private String getRealPathFromUri(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String filePath = cursor.getString(columnIndex);
-        cursor.close();
-        return filePath;
     }
 }
