@@ -8,17 +8,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.fish.photoshare.R;
-import com.fish.photoshare.common.CallBackHandler;
+import com.fish.photoshare.common.RequestHandler;
 import com.fish.photoshare.fragments.HomeFragment;
 import com.fish.photoshare.fragments.PublishFragment;
 import com.fish.photoshare.fragments.UserFragment;
 import com.fish.photoshare.pojo.User;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
-import com.fish.photoshare.utils.ToastUtils;
 import com.fish.photoshare.utils.UserStateUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements CallBackHandler {
+public class MainActivity extends AppCompatActivity implements RequestHandler {
     private BottomNavigationView mNavigationView;
     private FragmentManager manager;
     private HomeFragment homeFragment;
@@ -80,12 +79,12 @@ public class MainActivity extends AppCompatActivity implements CallBackHandler {
         return false;
     }
     @Override
-    public void onHandleSuccess() {
+    public void onSuccess() {
         // 校验成功则生成Fragment
         userFragment = UserFragment.newInstance();
     }
     @Override
-    public void onHandleFailure() {
+    public void onFailure() {
         // 校验不成功跳转到登陆注册页面
         Intent intent = new Intent(MainActivity.this, EntranceActivity.class);
         startActivity(intent);

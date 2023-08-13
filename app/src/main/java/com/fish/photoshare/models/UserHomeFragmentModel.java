@@ -1,27 +1,21 @@
 package com.fish.photoshare.models;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
-import com.fish.photoshare.activities.UserInformationActivity;
 import com.fish.photoshare.common.Api;
-import com.fish.photoshare.common.CrossComponentListener;
+import com.fish.photoshare.common.GalleryAndCameraListenerForAvatar;
 import com.fish.photoshare.common.Result;
 import com.fish.photoshare.pojo.User;
 import com.fish.photoshare.utils.HttpUtils;
@@ -72,7 +66,7 @@ public class UserHomeFragmentModel implements Serializable {
     private MaterialButton usernameConfirmButton;
     private MaterialButton introduceConfirmButton;
     private ResourcesUtils resourcesUtils;
-    private CrossComponentListener crossComponentListener;
+    private GalleryAndCameraListenerForAvatar galleryAndCameraListenerForAvatar;
     private Handler handler;
     private Context context;
     private int chooseSex;
@@ -80,9 +74,9 @@ public class UserHomeFragmentModel implements Serializable {
     public UserHomeFragmentModel(Context mContext) {
         this.context = mContext;
     }
-    public void initModel(View rootView, CrossComponentListener listener) {
+    public void initModel(View rootView, GalleryAndCameraListenerForAvatar listener) {
         // 监听器
-        crossComponentListener = listener;
+        galleryAndCameraListenerForAvatar = listener;
         // 初始化资源Utils
         resourcesUtils = new ResourcesUtils(context);
         // 更新ui的handler
@@ -128,11 +122,11 @@ public class UserHomeFragmentModel implements Serializable {
         });
         // 使用回调函数在UserInformationActivity打开相机和相册
         cameraButton.setOnClickListener(v -> {
-            crossComponentListener.onOpenCamera(avatar);
+            galleryAndCameraListenerForAvatar.onOpenCamera(avatar);
             avatarDialog.cancel();
         });
         imageButton.setOnClickListener(v -> {
-            crossComponentListener.onOpenGallery(avatar);
+            galleryAndCameraListenerForAvatar.onOpenGallery(avatar);
             avatarDialog.cancel();
         });
         // 性别
@@ -205,31 +199,28 @@ public class UserHomeFragmentModel implements Serializable {
                             }
                         });
                     } else {
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                switch (key){
-                                    case "sex" :
-                                        SharedPreferencesUtils.saveString(context, resourcesUtils.SEX, String.valueOf(value));
-                                        int i = Integer.parseInt(value);
-                                        if (i == 1) {
-                                            sex.setText("男");
-                                        } else if (i == 0) {
-                                            sex.setText("女");
-                                        }
-                                        sexDialog.cancel();
-                                        break;
-                                    case "username" :
-                                        SharedPreferencesUtils.saveString(context, resourcesUtils.USERNAME, String.valueOf(value));
-                                        username.setText(value);
-                                        usernameDialog.cancel();
-                                        break;
-                                    case "introduce" :
-                                        SharedPreferencesUtils.saveString(context, resourcesUtils.INTRODUCE, String.valueOf(value));
-                                        introduce.setText(value);
-                                        introduceDialog.cancel();
-                                        break;
-                                }
+                        handler.post(() -> {
+                            switch (key){
+                                case "sex" :
+                                    SharedPreferencesUtils.saveString(context, resourcesUtils.SEX, String.valueOf(value));
+                                    int i = Integer.parseInt(value);
+                                    if (i == 1) {
+                                        sex.setText("男");
+                                    } else if (i == 0) {
+                                        sex.setText("女");
+                                    }
+                                    sexDialog.cancel();
+                                    break;
+                                case "username" :
+                                    SharedPreferencesUtils.saveString(context, resourcesUtils.USERNAME, String.valueOf(value));
+                                    username.setText(value);
+                                    usernameDialog.cancel();
+                                    break;
+                                case "introduce" :
+                                    SharedPreferencesUtils.saveString(context, resourcesUtils.INTRODUCE, String.valueOf(value));
+                                    introduce.setText(value);
+                                    introduceDialog.cancel();
+                                    break;
                             }
                         });
                     }

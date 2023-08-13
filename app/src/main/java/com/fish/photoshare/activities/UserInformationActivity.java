@@ -1,6 +1,7 @@
 package com.fish.photoshare.activities;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,11 +18,12 @@ import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
-import com.fish.photoshare.common.CrossComponentListener;
+import com.fish.photoshare.common.GalleryAndCameraListenerForAvatar;
 import com.fish.photoshare.common.Result;
+import com.fish.photoshare.common.onSuccessBindUser;
 import com.fish.photoshare.fragments.user.UserHomeFragment;
 import com.fish.photoshare.pojo.Images;
-import com.fish.photoshare.utils.MyFileUtils;
+import com.fish.photoshare.utils.FileUtils;
 import com.fish.photoshare.utils.HttpUtils;
 import com.fish.photoshare.utils.ResourcesUtils;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
@@ -40,7 +42,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class UserInformationActivity extends AppCompatActivity implements CrossComponentListener{
+public class UserInformationActivity extends AppCompatActivity implements GalleryAndCameraListenerForAvatar, onSuccessBindUser {
     // launcher
     private ActivityResultLauncher galleryLauncher;
     private ActivityResultLauncher<Uri> cameraLauncher;
@@ -89,20 +91,20 @@ public class UserInformationActivity extends AppCompatActivity implements CrossC
         galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
             if (result != null) {
                 ImageUri = result;
-                File file = MyFileUtils.getFileFromUri(UserInformationActivity.this, ImageUri);
+                File file = FileUtils.getFileFromUri(UserInformationActivity.this, ImageUri);
                 ArrayList<File> fileList = new ArrayList<>();
                 fileList.add(file);
                 // 这里考虑到还有别的地方会用到上传文件和从Uri获取文件操作，因此进行封装;
-                MyFileUtils.uploadAvatar(fileList, uploadCallback);
+                FileUtils.uploadImage(fileList, uploadCallback);
             }
         });
         cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
             // 这里得到的是是否拍照成功的布尔值,所以定义了外部变量ImageUri接收Uri，在这里处理
             if (result) {
-                File file = MyFileUtils.getFileFromUri(UserInformationActivity.this, ImageUri);
+                File file = FileUtils.getFileFromUri(UserInformationActivity.this, ImageUri);
                 ArrayList<File> fileList = new ArrayList<>();
                 fileList.add(file);
-                MyFileUtils.uploadAvatar(fileList, uploadCallback);
+                FileUtils.uploadImage(fileList, uploadCallback);
             }
         });
     }
@@ -144,7 +146,7 @@ public class UserInformationActivity extends AppCompatActivity implements CrossC
                         images = result.getData();
                         Log.d("fishCat", "uploadCallback onResponse: " + images.toString());
                         String userAvatarUrl = images.getImageUrlList().get(0);
-                        MyFileUtils.bindUser(userAvatarUrl, updateCallback, UserInformationActivity.this);
+                        FileUtils.bindUser(userAvatarUrl, updateCallback, UserInformationActivity.this);
                     }
                 }
             }
@@ -163,7 +165,7 @@ public class UserInformationActivity extends AppCompatActivity implements CrossC
         if (user_avatar == null) {
             user_avatar = avatar;
         }
-        cameraLauncher.launch(createImageUri());
+        cameraLauncher.launch(createImageUri(UserInformationActivity.this));
     }
     @Override
     public void onSuccessBindUser(String avatarUrl) {
@@ -176,12 +178,12 @@ public class UserInformationActivity extends AppCompatActivity implements CrossC
                 .centerCrop()
                 .into(user_avatar));
     }
-    private Uri createImageUri() {
+    public Uri createImageUri(Context context) {
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmm", Locale.getDefault()).format(new Date());
         String imageFileName = "IMG_" + timeStamp + ".jpg";
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, imageFileName);
-        ImageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        ImageUri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         return ImageUri;
     }
 }

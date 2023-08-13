@@ -20,7 +20,6 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 
 public class HttpUtils <T> {
     public static final String APPID = "d4be705c704c434c868938cc000d5d61";
@@ -119,7 +118,7 @@ public class HttpUtils <T> {
         for (int i = 0; i < fileList.size(); i++){
             File file = fileList.get(i);
             try {
-                byte[] bytes = MyFileUtils.convertFileToBytes(file);
+                byte[] bytes = FileUtils.convertFileToBytes(file);
                 builder.addFormDataPart("fileList", file.getName(), RequestBody.Companion.create(bytes, MEDIA_TYPE_FORM_DATA));
                 body = builder.build();
             } catch (IOException e) {

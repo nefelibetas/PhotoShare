@@ -1,9 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.PublishFragment">
-
-</FrameLayout>
+    tools:context=".fragments.PublishFragment"
+    android:orientation="vertical">
+    <!-- 顶部 -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:strokeWidth="0dp"
+        app:cardCornerRadius="0dp"
+        app:cardBackgroundColor="@color/blue">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:text="发帖"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
+    </com.google.android.material.card.MaterialCardView>
+    <!-- 内容 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical">
+        <!-- 标题文字 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_gravity="top|center_horizontal">
+            <!--标题输入-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textSize="21dp"
+                    android:text="标题" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/titleInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:maxLines="1"
+                    android:maxLength="10"/>
+            </LinearLayout>
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp" />
+            <!--内容输入-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/contentInput"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:gravity="start|top"
+                    android:hint="内容描述"
+                    android:textSize="20sp"
+                    android:backgroundTint="@color/transparent" />
+            </LinearLayout>
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp" />
+        </LinearLayout>
+        <!-- 中间文字 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingStart="8dp"
+            android:paddingTop="10dp"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:textColor="@color/prompt"
+            android:text="请选择要上传的图片"/>
+        <!-- 图片上传 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@color/white"
+            android:orientation="horizontal">
+            <!--左侧选择-->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/uploadImages"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/gray"
+                android:layout_weight="1.2"
+                android:layout_gravity="start|center_vertical"
+                app:strokeWidth="0dp"
+                android:clickable="true">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="6dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="start|center_vertical"
+                        android:src="@drawable/outline_photo_camera_24"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:layout_gravity="end|center_vertical"
+                        android:textSize="19sp"
+                        android:text="添加图片"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <!--右侧说明-->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:paddingEnd="20dp"
+                android:gravity="end"
+                android:layout_gravity="end|center_vertical"
+                android:textColor="@color/prompt"
+                android:textSize="20sp"
+                android:text="点击即可添加图片"/>
+        </LinearLayout>
+        <!-- 图片列表 -->
+        <LinearLayout
+            android:id="@+id/layoutRecyclerList"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingBottom="5dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerListPublish"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"/>
+        </LinearLayout>
+        <!-- 按钮 -->
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_marginStart="12dp"
+                android:backgroundTint="@color/blue"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_gravity="start|center_vertical"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:text="保存"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveAndPostButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:backgroundTint="@color/blue"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_gravity="end|center_vertical"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:layout_marginEnd="20dp"
+                android:text="保存并发布"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

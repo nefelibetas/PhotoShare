@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.fish.photoshare.R;
-import com.fish.photoshare.common.CrossComponentListener;
+import com.fish.photoshare.common.GalleryAndCameraListenerForAvatar;
 import com.fish.photoshare.models.UserHomeFragmentModel;
 import com.fish.photoshare.pojo.User;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
@@ -18,12 +18,12 @@ import com.fish.photoshare.utils.SharedPreferencesUtils;
 public class UserHomeFragment extends Fragment {
     private UserHomeFragmentModel userHomeFragmentModel;
     private User user;
-    private CrossComponentListener crossComponentListener;
+    private GalleryAndCameraListenerForAvatar galleryAndCameraListenerForAvatar;
     public UserHomeFragment() {}
-    public UserHomeFragment(CrossComponentListener listener) {
-        crossComponentListener = listener;
+    public UserHomeFragment(GalleryAndCameraListenerForAvatar listener) {
+        galleryAndCameraListenerForAvatar = listener;
     }
-    public static UserHomeFragment newInstance(CrossComponentListener listener) {
+    public static UserHomeFragment newInstance(GalleryAndCameraListenerForAvatar listener) {
         UserHomeFragment fragment = new UserHomeFragment(listener);
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -47,7 +47,7 @@ public class UserHomeFragment extends Fragment {
     public void initView(View rootView) {
         // initModel
         userHomeFragmentModel = new UserHomeFragmentModel(getContext());
-        userHomeFragmentModel.initModel(rootView, crossComponentListener);
+        userHomeFragmentModel.initModel(rootView, galleryAndCameraListenerForAvatar);
         userHomeFragmentModel.initOnClickListener();
         userHomeFragmentModel.initData(user);
     }
