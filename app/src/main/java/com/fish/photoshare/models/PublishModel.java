@@ -16,8 +16,8 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class PublishModel {
-    private TextInputEditText titleInput;
-    private TextInputEditText contentInput;
+    public TextInputEditText titleInput;
+    public TextInputEditText contentInput;
     private MaterialCardView uploadImageCard;
     private MaterialButton saveButton;
     private MaterialButton saveAndPostButton;
@@ -39,7 +39,7 @@ public class PublishModel {
     }
     public void initView(View rootView) {
         titleInput = rootView.findViewById(R.id.titleInput);
-        contentInput = rootView.findViewById(R.id.titleInput);
+        contentInput = rootView.findViewById(R.id.contentInput);
         uploadImageCard = rootView.findViewById(R.id.uploadImages);
         saveButton = rootView.findViewById(R.id.saveButton);
         saveAndPostButton = rootView.findViewById(R.id.saveAndPostButton);
@@ -63,15 +63,21 @@ public class PublishModel {
         });
         // 保存按钮
         saveButton.setOnClickListener(v -> {
-            clickFunction.onClick();
+            clickFunction.onSaveClick();
         });
         saveAndPostButton.setOnClickListener(v -> {
-            clickFunction.onClick();
+            clickFunction.onSaveAndPostClick();
         });
     }
     public void setAdapter() {
         manager = new GridLayoutManager(context, 3);
         recyclerListPublish.setLayoutManager(manager);
         recyclerListPublish.setAdapter(publishAdapter);
+    }
+    public void clear() {
+        contentInput.clearFocus();
+        contentInput.setText("");
+        titleInput.clearFocus();
+        titleInput.setText("");
     }
 }

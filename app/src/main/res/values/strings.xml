@@ -25,5 +25,7 @@
     <string name="user_introduce">user_introduce</string>
     <string name="user_createTime">user_createTime</string>
     <string name="user_lastUpdateTime">user_lastUpdateTime</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

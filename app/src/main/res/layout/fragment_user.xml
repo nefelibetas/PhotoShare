@@ -44,9 +44,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:orientation="vertical">
-
         <!-- 第一个 -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/editCard"
@@ -76,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:textSize="22sp"
+                    android:textSize="21sp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/icon_edit"
@@ -110,13 +109,13 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:src="@drawable/baseline_star_rate_24"/>
+                    android:src="@drawable/baseline_star_24"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:textSize="22sp"
+                    android:textSize="21sp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/icon_star"
@@ -129,7 +128,7 @@
             android:layout_height="wrap_content"/>
         <!-- 第三个 -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/settingCard"
+            android:id="@+id/unpublishedCard"
             android:layout_width="match_parent"
             android:layout_height="75dp"
             app:cardCornerRadius="0dp"
@@ -143,24 +142,64 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <ImageView
-                    android:id="@+id/icon_setting"
+                    android:id="@+id/icon_unpublished"
                     android:layout_marginLeft="10dp"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:src="@drawable/outline_settings_24"/>
+                    android:src="@drawable/outline_unpublished_24"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:textSize="22sp"
+                    android:textSize="21sp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@+id/icon_setting"
-                    android:text="设置"/>
+                    app:layout_constraintLeft_toRightOf="@+id/icon_unpublished"
+                    android:text="保存的稿件"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <!-- 第四个 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/publishedCard"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            app:cardCornerRadius="0dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/transparent"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            app:contentPadding="8dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/icon_publish"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:src="@drawable/outline_publish_24"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="21sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/icon_publish"
+                    android:text="我的帖子"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>

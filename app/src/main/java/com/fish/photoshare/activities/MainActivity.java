@@ -13,11 +13,14 @@ import com.fish.photoshare.fragments.HomeFragment;
 import com.fish.photoshare.fragments.PublishFragment;
 import com.fish.photoshare.fragments.UserFragment;
 import com.fish.photoshare.pojo.User;
+import com.fish.photoshare.utils.ResourcesUtils;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
+import com.fish.photoshare.utils.ToastUtils;
 import com.fish.photoshare.utils.UserStateUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements RequestHandler {
+    private ResourcesUtils resourcesUtils;
     private BottomNavigationView mNavigationView;
     private FragmentManager manager;
     private HomeFragment homeFragment;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements RequestHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        resourcesUtils = new ResourcesUtils(MainActivity.this);
         changeActivityHandler();
         publishFragment = PublishFragment.newInstance();
         initHomeFragment();
@@ -54,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements RequestHandler {
                 .commit();
     }
     private void changeActivityHandler() {
-        String userIdKey = getResources().getString(R.string.user_id);
+        String userIdKey = resourcesUtils.ID;
         // 如果在本地已经保存有用户的信息,则进行校验
         User user = SharedPreferencesUtils.getUser(MainActivity.this);
         // 用userId判断登陆状态
@@ -79,8 +83,11 @@ public class MainActivity extends AppCompatActivity implements RequestHandler {
         return false;
     }
     @Override
-    public void onSuccess() {
-        // 校验成功则生成Fragment
+    public void onSuccess(String id) {
+        if (!id.equals(resourcesUtils.ID)) {
+            // 校验成功则生成Fragment
+            SharedPreferencesUtils.saveString(MainActivity.this, resourcesUtils.ID, id);
+        }
         userFragment = UserFragment.newInstance();
     }
     @Override

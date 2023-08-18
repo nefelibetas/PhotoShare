@@ -2,6 +2,8 @@ package com.fish.photoshare.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -94,7 +96,9 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
                     Result<User> result = HttpUtils.gson.fromJson(body, new TypeToken<Result<User>>(){}.getType());
                     Log.d("fishCat", "Login onResponse result data: " + result);
                     if (result.getCode() != 200) {
-                        ToastUtils.show(EntranceActivity.this, result.getMsg());
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            ToastUtils.show(EntranceActivity.this, result.getMsg());
+                        });
                     } else {
                         // 获取到的数据没有异常就可以跳转到主界面，然后传递数据
                         Intent intent = new Intent(EntranceActivity.this, MainActivity.class);
@@ -137,10 +141,10 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
                         String body = response.body().string();
                         Result<Object> res = HttpUtils.gson.fromJson(body, new TypeToken<Result<Object>>(){}.getType());
                         Log.d("fishCat", "register onResponse data: " + res);
-                        if (res.getCode() == 500) {
-                            ToastUtils.show(EntranceActivity.this, res.getMsg());
+                        if (res.getCode() != 200) {
+                            new Handler(Looper.getMainLooper()).post(() -> ToastUtils.show(EntranceActivity.this, res.getMsg()));
                         } else {
-                            ToastUtils.show(EntranceActivity.this, "注册完成，请登陆");
+                            new Handler(Looper.getMainLooper()).post(() -> ToastUtils.show(EntranceActivity.this, "注册成功，请登陆"));
                         }
                     }
                 }

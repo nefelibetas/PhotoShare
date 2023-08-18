@@ -50,7 +50,8 @@ public class UserStateUtils {
                         });
                         userRequestHandler.onFailure();
                     } else {
-                        userRequestHandler.onSuccess();
+                        String id = result.getData().getId();
+                        userRequestHandler.onSuccess(id);
                     }
                 } else {
                     Log.d("fishCat", "userInformationIsOkHandler onResponse: " + "出现了问题" );

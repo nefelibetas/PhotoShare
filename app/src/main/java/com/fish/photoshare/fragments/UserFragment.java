@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
+import com.fish.photoshare.activities.StarActivity;
 import com.fish.photoshare.activities.UserInformationActivity;
 import com.fish.photoshare.common.Api;
 import com.fish.photoshare.pojo.User;
@@ -36,8 +37,9 @@ import okhttp3.Response;
 public class UserFragment extends Fragment implements View.OnClickListener {
     private User information;
     private MaterialCardView editCard;
-    private MaterialCardView settingCard;
+    private MaterialCardView unpublishedCard;
     private MaterialCardView starCard;
+    private MaterialCardView publishCard;
     private TextView username;
     private ShapeableImageView avatar;
     public static UserFragment newInstance() {
@@ -72,12 +74,14 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     private void initView(View rootView) {
         editCard = rootView.findViewById(R.id.editCard);
         starCard = rootView.findViewById(R.id.starCard);
-        settingCard = rootView.findViewById(R.id.settingCard);
+        unpublishedCard = rootView.findViewById(R.id.unpublishedCard);
+        publishCard = rootView.findViewById(R.id.publishedCard);
         username = rootView.findViewById(R.id.tv_username);
         avatar = rootView.findViewById(R.id.ic_avatar);
         editCard.setOnClickListener(this);
         starCard.setOnClickListener(this);
-        settingCard.setOnClickListener(this);
+        unpublishedCard.setOnClickListener(this);
+        publishCard.setOnClickListener(this);
     }
     private void dataHandler() {
         // 初始化从本地获取并通过校验得到的数据
@@ -111,8 +115,14 @@ public class UserFragment extends Fragment implements View.OnClickListener {
             intent.putExtras(bundle);
             startActivity(intent);
         } else if (id == R.id.starCard) {
+            Intent intent = new Intent(getActivity(), StarActivity.class);
+            Bundle bundle = new Bundle();
+            // putData
+            intent.putExtras(bundle);
+            startActivity(intent);
+        } else if (id == R.id.unpublishedCard) {
 
-        } else if (id == R.id.settingCard) {
+        } else if (id == R.id.publishedCard) {
 
         }
     }
