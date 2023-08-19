@@ -6,13 +6,13 @@ public class Record {
     private int current;
     private int size;
     private int total;
-    private ArrayList<RecordDetail> recordDetailList;
+    private ArrayList<RecordDetail> records;
     public Record(){}
-    public Record(int current, int size, int total, ArrayList<RecordDetail> recordDetailList) {
+    public Record(int current, int size, int total, ArrayList<RecordDetail> records) {
         this.current = current;
         this.size = size;
         this.total = total;
-        this.recordDetailList = recordDetailList;
+        this.records = records;
     }
     public int getCurrent() {
         return current;
@@ -33,10 +33,10 @@ public class Record {
         this.total = total;
     }
     public ArrayList<RecordDetail> getRecordDetail() {
-        return recordDetailList;
+        return records;
     }
     public void setRecordDetail(ArrayList<RecordDetail> recordDetailList) {
-        this.recordDetailList = recordDetailList;
+        this.records = recordDetailList;
     }
     @Override
     public String toString() {
@@ -44,7 +44,7 @@ public class Record {
                 "current=" + current +
                 ", size=" + size +
                 ", total=" + total +
-                ", recordDetailList=" + recordDetailList +
+                ", recordDetailList=" + records +
                 '}';
     }
 }
