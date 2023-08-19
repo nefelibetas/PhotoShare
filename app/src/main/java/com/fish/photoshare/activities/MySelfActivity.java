@@ -1,14 +1,15 @@
 package com.fish.photoshare.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.fish.photoshare.R;
 import com.fish.photoshare.adapter.MyselfAdapter;
@@ -34,13 +35,14 @@ public class MySelfActivity extends AppCompatActivity {
     private Callback deleteCallback;
     private RecyclerView recyclerListMyself;
     private MyselfAdapter myselfAdapter;
+    private ImageView back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myself);
-        getData();
-        initParams();
         initCallback();
+        initParams();
+        getData();
     }
     public void initCallback() {
         changeCallback = new Callback() {
@@ -56,8 +58,10 @@ public class MySelfActivity extends AppCompatActivity {
                     if (result.getCode() != 200) {
                         Log.d("fishCat", "changeCallback onResponse: code is not 200 and result " + result);
                     } else {
-                        ToastUtils.show(MySelfActivity.this, "发布成功");
-                        new Handler(Looper.getMainLooper()).post(() -> myselfAdapter.notifyDataSetChanged());
+                        Log.d("fishCat", "onResponse: " + result);
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            ToastUtils.show(MySelfActivity.this, "发布成功");
+                        });
                     }
                 }
             }
@@ -75,18 +79,25 @@ public class MySelfActivity extends AppCompatActivity {
                     if (result.getCode() != 200) {
                         Log.d("fishCat", "deleteCallback onResponse: code is not 200 and result " + result);
                     } else {
-                        ToastUtils.show(MySelfActivity.this, "删除成功");
-                        new Handler(Looper.getMainLooper()).post(() -> myselfAdapter.notifyDataSetChanged());
+                        Log.d("fishCat", "onResponse: " + result);
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            ToastUtils.show(MySelfActivity.this, "删除成功");
+                        });
                     }
                 }
             }
         };
     }
     public void initParams() {
-        recyclerListMyself = findViewById(R.id.recyclerListMyself);
-    }
-    public void getData(){
         resourcesUtils = new ResourcesUtils(MySelfActivity.this);
+        recyclerListMyself = findViewById(R.id.recyclerListMyself);
+        recyclerListMyself.setLayoutManager(new LinearLayoutManager(MySelfActivity.this));
+        back = findViewById(R.id.icon_back);
+        back.setOnClickListener(v -> {
+            finish();
+        });
+    }
+    public void getData() {
         HashMap<String, String> params = new HashMap<>();
         String id = SharedPreferencesUtils.getString(MySelfActivity.this, resourcesUtils.ID, null);
         params.put("userId", id);
@@ -106,7 +117,6 @@ public class MySelfActivity extends AppCompatActivity {
                         Record records = result.getData();
                         new Handler(Looper.getMainLooper()).post(() -> {
                             myselfAdapter = new MyselfAdapter(MySelfActivity.this, changeCallback, deleteCallback, records);
-                            recyclerListMyself.setLayoutManager(new LinearLayoutManager(MySelfActivity.this));
                             recyclerListMyself.setAdapter(myselfAdapter);
                         });
                     }

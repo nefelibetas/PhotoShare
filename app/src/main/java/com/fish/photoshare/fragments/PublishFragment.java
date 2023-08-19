@@ -4,12 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -17,13 +11,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.fish.photoshare.R;
 import com.fish.photoshare.adapter.PublishAdapter;
 import com.fish.photoshare.common.Api;
 import com.fish.photoshare.common.GalleryAndCameraListenerForPublish;
-import com.fish.photoshare.common.RequestHandler;
 import com.fish.photoshare.common.Result;
 import com.fish.photoshare.common.onButtonClick;
 import com.fish.photoshare.models.PublishModel;
@@ -42,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;

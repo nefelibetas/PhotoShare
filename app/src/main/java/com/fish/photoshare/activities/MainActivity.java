@@ -15,7 +15,6 @@ import com.fish.photoshare.fragments.UserFragment;
 import com.fish.photoshare.pojo.User;
 import com.fish.photoshare.utils.ResourcesUtils;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
-import com.fish.photoshare.utils.ToastUtils;
 import com.fish.photoshare.utils.UserStateUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -96,3 +95,4 @@ public class MainActivity extends AppCompatActivity implements RequestHandler {
         startActivity(intent);
         finish();
     }
+}

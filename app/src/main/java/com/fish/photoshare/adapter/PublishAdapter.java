@@ -1,15 +1,12 @@
 package com.fish.photoshare.adapter;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
@@ -17,14 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
-import com.fish.photoshare.utils.FileUtils;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class PublishAdapter extends RecyclerView.Adapter<PublishAdapter.ViewHolder> {
     private Context context;

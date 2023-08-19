@@ -147,3 +147,4 @@ public class RecordDetail implements Serializable {
                 ", username='" + username + '\'' +
                 '}';
     }
+}

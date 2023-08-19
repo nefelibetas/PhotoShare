@@ -1,17 +1,21 @@
 package com.fish.photoshare.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.fish.photoshare.R;
+import com.fish.photoshare.adapter.StarAdapter;
 import com.fish.photoshare.common.Api;
 import com.fish.photoshare.common.Result;
 import com.fish.photoshare.pojo.Record;
 import com.fish.photoshare.utils.HttpUtils;
 import com.fish.photoshare.utils.ResourcesUtils;
+import com.fish.photoshare.utils.SharedPreferencesUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
@@ -22,10 +26,9 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class StarActivity extends AppCompatActivity {
-    private Callback starCallback;
     private ResourcesUtils resourcesUtils;
-    private Integer current = 0;
-    private Integer size = 0;
+    private RecyclerView recyclerListStar;
+    private StarAdapter starAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +38,18 @@ public class StarActivity extends AppCompatActivity {
         getData();
     }
     public void initCallback() {
-        starCallback = new Callback() {
+
+    }
+    public void initParams() {
+        recyclerListStar = findViewById(R.id.recyclerListStar);
+        recyclerListStar.setLayoutManager(new LinearLayoutManager(StarActivity.this));
+    }
+    public void getData(){
+        HashMap<String, String> params = new HashMap<>();
+        resourcesUtils = new ResourcesUtils(StarActivity.this);
+        String id = SharedPreferencesUtils.getString(StarActivity.this, resourcesUtils.ID, null);
+        params.put("userId", id);
+        HttpUtils.sendGetRequest(Api.COLLECT, params, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.d("fishCat", "starCallback onFailure: " + e.getMessage());
@@ -46,23 +60,12 @@ public class StarActivity extends AppCompatActivity {
                     String body = response.body().string();
                     Result<Record> result = HttpUtils.gson.fromJson(body, new TypeToken<Result<Record>>(){}.getType());
                     if (result.getCode() != 200) {
-                        Log.d("fishCat", "callback onResponse: code is not 200");
+                        Log.d("fishCat", "starCallback onResponse: code is not 200");
                     } else {
-                        Record record = result.getData();
-                        Log.d("fishCat", "starCallback onResponse: " + record.toString());
+//                        starAdapter = new StarAdapter(StarActivity.this, );
                     }
                 }
             }
-        };
-    }
-    public void initParams() {
-        resourcesUtils = new ResourcesUtils(StarActivity.this);
-    }
-    public void getData(){
-        HashMap<String, String> params = new HashMap<>();
-        String id = resourcesUtils.ID;
-        params.put("userId", id);
-        // putData into map
-        HttpUtils.sendPostRequest(Api.MYSELF, params, starCallback);
+        });
     }
 }

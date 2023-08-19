@@ -1,7 +1,5 @@
 package com.fish.photoshare.pojo;
 
-import android.media.Image;
-
 import java.util.ArrayList;
 
 public class Images {

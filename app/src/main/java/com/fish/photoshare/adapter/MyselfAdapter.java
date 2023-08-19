@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.Callback;
@@ -53,28 +51,30 @@ public class MyselfAdapter extends RecyclerView.Adapter<MyselfAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RecordDetail detail = records.getRecordDetail().get(position);
+        HashMap<String, String> publishParam = new HashMap<>();
+        HashMap<String, String> deleteParam = new HashMap<>();
         String id = SharedPreferencesUtils.getString(context, resourcesUtils.ID, null);
-        HashMap<String, String> params = new HashMap<>();
         // 点击即可查看
         holder.myselfCard.setOnClickListener(v -> {
 
         });
         // 发布
         holder.publishButton.setOnClickListener(v -> {
-            params.put("id", detail.getId());
-            params.put("pUserId", id);
-            params.put("imageCode", String.valueOf(detail.getImageCode()));
-            params.put("title", detail.getTitle());
-            params.put("content", detail.getContent());
-            HttpUtils.sendPostRequest(Api.CHANGE, params, changeCallback);
-            params.clear();
+            publishParam.put("id", detail.getId());
+            publishParam.put("pUserId", id);
+            publishParam.put("imageCode", String.valueOf(detail.getImageCode()));
+            publishParam.put("title", detail.getTitle());
+            publishParam.put("content", detail.getContent());
+            HttpUtils.sendPostRequest(Api.CHANGE, publishParam, changeCallback);
         });
         // 删除
         holder.deleteButton.setOnClickListener(v -> {
-            params.put("shareId", detail.getId());
-            params.put("userId", id);
-            HttpUtils.sendPostRequest(Api.DELETE, params, deleteCallback);
-            params.clear();
+            deleteParam.put("shareId", detail.getId());
+            deleteParam.put("userId", id);
+            String newUrl = HttpUtils.getRequestHandler(Api.DELETE, deleteParam);
+            HttpUtils.sendPostRequest(newUrl, null, deleteCallback);
+            records.getRecordDetail().remove(detail);
+            notifyDataSetChanged();
         });
         // 图片选第一张
         if (detail.getImageUrlList() != null && detail.getImageUrlList().size() > 0) {

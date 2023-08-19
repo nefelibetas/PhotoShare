@@ -2,13 +2,10 @@ package com.fish.photoshare.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,20 +18,12 @@ import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
 import com.fish.photoshare.activities.MySelfActivity;
 import com.fish.photoshare.activities.StarActivity;
+import com.fish.photoshare.activities.UnPublishedActivity;
 import com.fish.photoshare.activities.UserInformationActivity;
-import com.fish.photoshare.common.Api;
 import com.fish.photoshare.pojo.User;
-import com.fish.photoshare.utils.HttpUtils;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 public class UserFragment extends Fragment implements View.OnClickListener {
     private User information;
     private MaterialCardView editCard;
@@ -110,23 +99,24 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.editCard) {
+            // 编辑个人信息
             Intent intent = new Intent(getActivity(), UserInformationActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("information", information);
             intent.putExtras(bundle);
             startActivity(intent);
         } else if (id == R.id.starCard) {
+            // 收藏
             Intent intent = new Intent(getActivity(), StarActivity.class);
-            Bundle bundle = new Bundle();
-            // putData
-            intent.putExtras(bundle);
             startActivity(intent);
         } else if (id == R.id.unpublishedCard) {
-            Intent intent = new Intent(getActivity(), MySelfActivity.class);
-            Bundle bundle = new Bundle();
-            intent.putExtras(bundle);
+            // 仅保存未发布帖子
+            Intent intent = new Intent(getActivity(), UnPublishedActivity.class);
             startActivity(intent);
         } else if (id == R.id.publishedCard) {
-
+            // 以及发布的帖子
+            Intent intent = new Intent(getActivity(), MySelfActivity.class);
+            startActivity(intent);
         }
     }
+}
