@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
+import com.fish.photoshare.activities.MySelfActivity;
 import com.fish.photoshare.activities.StarActivity;
 import com.fish.photoshare.activities.UserInformationActivity;
 import com.fish.photoshare.common.Api;
@@ -121,9 +122,11 @@ public class UserFragment extends Fragment implements View.OnClickListener {
             intent.putExtras(bundle);
             startActivity(intent);
         } else if (id == R.id.unpublishedCard) {
-
+            Intent intent = new Intent(getActivity(), MySelfActivity.class);
+            Bundle bundle = new Bundle();
+            intent.putExtras(bundle);
+            startActivity(intent);
         } else if (id == R.id.publishedCard) {
 
         }
     }
-}

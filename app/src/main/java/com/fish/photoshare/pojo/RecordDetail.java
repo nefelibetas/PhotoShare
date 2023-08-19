@@ -4,23 +4,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class RecordDetail implements Serializable {
-    private int collectId;
-    private int collectNum;
+    private String collectId;
+    private String collectNum;
     private String content;
-    private long createTime;
+    private String createTime;
     private boolean hasCollect;
     private boolean hasFocus;
     private boolean hasLike;
-    private int id;
-    private int imageCode;
+    private String id;
+    private String imageCode;
     private ArrayList<String> imageUrlList;
-    private int likeId;
-    private int likeNum;
-    private int pUserId;
+    private String likeId;
+    private String likeNum;
+    private String pUserId;
     private String title;
     private String username;
     public RecordDetail(){}
-    public RecordDetail(int collectId, int collectNum, String content, long createTime, boolean hasCollect, boolean hasFocus, boolean hasLike, int id, int imageCode, ArrayList<String> imageUrlList, int likeId, int likeNum, int pUserId, String title, String username) {
+    public RecordDetail(String collectId, String collectNum, String content, String createTime, boolean hasCollect, boolean hasFocus, boolean hasLike, String id, String imageCode, ArrayList<String> imageUrlList, String likeId, String likeNum, String pUserId, String title, String username) {
         this.collectId = collectId;
         this.collectNum = collectNum;
         this.content = content;
@@ -37,16 +37,16 @@ public class RecordDetail implements Serializable {
         this.title = title;
         this.username = username;
     }
-    public int getCollectId() {
+    public String getCollectId() {
         return collectId;
     }
-    public void setCollectId(int collectId) {
+    public void setCollectId(String collectId) {
         this.collectId = collectId;
     }
-    public int getCollectNum() {
+    public String getCollectNum() {
         return collectNum;
     }
-    public void setCollectNum(int collectNum) {
+    public void setCollectNum(String collectNum) {
         this.collectNum = collectNum;
     }
     public String getContent() {
@@ -55,10 +55,10 @@ public class RecordDetail implements Serializable {
     public void setContent(String content) {
         this.content = content;
     }
-    public long getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
     public boolean isHasCollect() {
@@ -79,16 +79,16 @@ public class RecordDetail implements Serializable {
     public void setHasLike(boolean hasLike) {
         this.hasLike = hasLike;
     }
-    public int getId() {
+    public String getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
-    public int getImageCode() {
+    public String getImageCode() {
         return imageCode;
     }
-    public void setImageCode(int imageCode) {
+    public void setImageCode(String imageCode) {
         this.imageCode = imageCode;
     }
     public ArrayList<String> getImageUrlList() {
@@ -97,22 +97,22 @@ public class RecordDetail implements Serializable {
     public void setImageUrlList(ArrayList<String> imageUrlList) {
         this.imageUrlList = imageUrlList;
     }
-    public int getLikeId() {
+    public String getLikeId() {
         return likeId;
     }
-    public void setLikeId(int likeId) {
+    public void setLikeId(String likeId) {
         this.likeId = likeId;
     }
-    public int getLikeNum() {
+    public String getLikeNum() {
         return likeNum;
     }
-    public void setLikeNum(int likeNum) {
+    public void setLikeNum(String likeNum) {
         this.likeNum = likeNum;
     }
-    public int getPUserId() {
+    public String getPUserId() {
         return pUserId;
     }
-    public void setPUserId(int pUserId) {
+    public void setPUserId(String pUserId) {
         this.pUserId = pUserId;
     }
     public String getTitle() {
@@ -147,4 +147,3 @@ public class RecordDetail implements Serializable {
                 ", username='" + username + '\'' +
                 '}';
     }
-}
