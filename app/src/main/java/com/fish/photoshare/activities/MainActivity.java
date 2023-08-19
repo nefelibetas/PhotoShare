@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements RequestHandler {
             finish();
         }
     }
-
     public boolean replaceFragment(Fragment fragment) {
         if (fragment != null) {
             manager.beginTransaction()
@@ -97,4 +96,3 @@ public class MainActivity extends AppCompatActivity implements RequestHandler {
         startActivity(intent);
         finish();
     }
-}

@@ -10,17 +10,21 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:enableOnBackInvokedCallback="true"
         android:theme="@style/Theme.PhotoShare"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activities.MySelfActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.StarActivity"
             android:exported="false" />
@@ -56,4 +60,3 @@
         </provider>
     </application>
 
-</manifest>
