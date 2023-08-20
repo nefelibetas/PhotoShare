@@ -36,9 +36,9 @@ public class StarAdapter extends RecyclerView.Adapter<StarAdapter.ViewHolder> {
         return 0;
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private ShapeableImageView PostImage;
-        private TextView textTitle;
-        private TextView textContent;
+        private final ShapeableImageView PostImage;
+        private final TextView textTitle;
+        private final TextView textContent;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

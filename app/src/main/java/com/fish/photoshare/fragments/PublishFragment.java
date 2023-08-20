@@ -94,7 +94,7 @@ public class PublishFragment extends Fragment implements GalleryAndCameraListene
         galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
             if (result != null) {
                 File file = FileUtils.getFileFromUri(getContext(), result);
-                if (fileList.size() <= 9) {
+                if (fileList.size() < 9) {
                     fileList.add(file);
                     adapter.notifyDataSetChanged();
                 } else {
@@ -105,7 +105,7 @@ public class PublishFragment extends Fragment implements GalleryAndCameraListene
         cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
             if (result) {
                 File file = FileUtils.getFileFromUri(getContext(), imageUri);
-                if (fileList.size() <= 8) {
+                if (fileList.size() < 9) {
                     fileList.add(file);
                     adapter.notifyDataSetChanged();
                 } else {
@@ -188,7 +188,6 @@ public class PublishFragment extends Fragment implements GalleryAndCameraListene
         };
     }
     public void saveRequest() {
-        HashMap<String, String> params = new HashMap<>();
         String idKey = resourcesUtils.ID;
         String textTitleInput = publishModel.titleInput.getText().toString();
         if (textTitleInput == null || "".equals(textTitleInput)) {
@@ -201,16 +200,31 @@ public class PublishFragment extends Fragment implements GalleryAndCameraListene
             return;
         }
         String id = SharedPreferencesUtils.getString(getContext(), idKey, null);
-        params.put("id", id);
-        params.put("pUserId", id);
-        params.put("title", textTitleInput);
-        params.put("content", textContentInput);
-        params.put("imageCode", ImageCode);
-        saveParams = params;
-        HttpUtils.sendPostRequest(Api.SAVE, params, saveCallback);
+        saveParams.put("id", id);
+        saveParams.put("pUserId", id);
+        saveParams.put("title", textTitleInput);
+        saveParams.put("content", textContentInput);
+        saveParams.put("imageCode", ImageCode);
+        HttpUtils.sendPostRequest(Api.SAVE, saveParams, saveCallback);
     }
-    // 调用上方保存请求后，再发起一个修改保存状态为发布状态的请求
     public void saveAndPostRequest() {
+        String idKey = resourcesUtils.ID;
+        String textTitleInput = publishModel.titleInput.getText().toString();
+        if (textTitleInput == null || "".equals(textTitleInput)) {
+            ToastUtils.show(getContext(), "标题未输入");
+            return;
+        }
+        String textContentInput = publishModel.contentInput.getText().toString();
+        if (textContentInput == null || "".equals(textContentInput)) {
+            ToastUtils.show(getContext(), "内容未输入");
+            return;
+        }
+        String id = SharedPreferencesUtils.getString(getContext(), idKey, null);
+        saveParams.put("id", id);
+        saveParams.put("pUserId", id);
+        saveParams.put("title", textTitleInput);
+        saveParams.put("content", textContentInput);
+        saveParams.put("imageCode", ImageCode);
         HttpUtils.sendPostRequest(Api.ADD, saveParams, saveAndPostCallback);
     }
     @Override
@@ -229,7 +243,6 @@ public class PublishFragment extends Fragment implements GalleryAndCameraListene
         imageUri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         return imageUri;
     }
-    // 点击的回调函数
     @Override
     public void onSaveClick() {
         if (fileList.size() != 0) {

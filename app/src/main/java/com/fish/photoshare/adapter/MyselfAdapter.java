@@ -31,17 +31,18 @@ import okhttp3.Callback;
 public class MyselfAdapter extends RecyclerView.Adapter<MyselfAdapter.ViewHolder> {
     private Context context;
     private ResourcesUtils resourcesUtils;
-    private Callback changeCallback;
     private Callback deleteCallback;
     private Record records;
-    public MyselfAdapter() {}
-    public MyselfAdapter(Context context, Callback changeCallback, Callback deleteCallback, Record records) {
+    public MyselfAdapter() {
+    }
+
+    public MyselfAdapter(Context context, Callback deleteCallback, Record records) {
         this.context = context;
-        this.changeCallback = changeCallback;
         this.deleteCallback = deleteCallback;
         this.records = records;
         this.resourcesUtils = new ResourcesUtils(context);
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,26 +52,16 @@ public class MyselfAdapter extends RecyclerView.Adapter<MyselfAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RecordDetail detail = records.getRecordDetail().get(position);
-        HashMap<String, String> publishParam = new HashMap<>();
         HashMap<String, String> deleteParam = new HashMap<>();
         String id = SharedPreferencesUtils.getString(context, resourcesUtils.ID, null);
         // 点击即可查看
         holder.myselfCard.setOnClickListener(v -> {
 
         });
-        // 发布
-        holder.publishButton.setOnClickListener(v -> {
-            publishParam.put("id", detail.getId());
-            publishParam.put("pUserId", id);
-            publishParam.put("imageCode", String.valueOf(detail.getImageCode()));
-            publishParam.put("title", detail.getTitle());
-            publishParam.put("content", detail.getContent());
-            HttpUtils.sendPostRequest(Api.CHANGE, publishParam, changeCallback);
-        });
         // 删除
         holder.deleteButton.setOnClickListener(v -> {
-            deleteParam.put("shareId", detail.getId());
             deleteParam.put("userId", id);
+            deleteParam.put("shareId", detail.getId());
             String newUrl = HttpUtils.getRequestHandler(Api.DELETE, deleteParam);
             HttpUtils.sendPostRequest(newUrl, null, deleteCallback);
             records.getRecordDetail().remove(detail);
@@ -99,21 +90,20 @@ public class MyselfAdapter extends RecyclerView.Adapter<MyselfAdapter.ViewHolder
     public int getItemCount() {
         return records.getRecordDetail().size();
     }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // myself_item.xml中有标签并且需要到的元素
-        private MaterialCardView myselfCard;
-        private ShapeableImageView PostImage;
-        private TextView TextTitle;
-        private TextView TextContent;
-        private MaterialButton publishButton;
-        private MaterialButton deleteButton;
+        private final MaterialCardView myselfCard;
+        private final ShapeableImageView PostImage;
+        private final TextView TextTitle;
+        private final TextView TextContent;
+        private final MaterialButton deleteButton;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             myselfCard = itemView.findViewById(R.id.myselfCard);
             PostImage = itemView.findViewById(R.id.PostImage);
-            TextTitle = itemView.findViewById(R.id.textContent);
-            TextContent = itemView.findViewById(R.id.textTitle);
-            publishButton = itemView.findViewById(R.id.publishButton);
+            TextTitle = itemView.findViewById(R.id.textTitle);
+            TextContent = itemView.findViewById(R.id.textContent);
             deleteButton = itemView.findViewById(R.id.deleteButton);
         }
     }

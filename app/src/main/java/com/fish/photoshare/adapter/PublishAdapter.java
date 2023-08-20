@@ -57,9 +57,10 @@ public class PublishAdapter extends RecyclerView.Adapter<PublishAdapter.ViewHold
     public int getItemCount() {
         return fileList.size();
     }
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-        private ShapeableImageView selectedImage;
-        private ShapeableImageView closeImage;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final ShapeableImageView selectedImage;
+        private final ShapeableImageView closeImage;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             selectedImage = itemView.findViewById(R.id.selectedImage);

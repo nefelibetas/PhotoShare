@@ -62,8 +62,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginEnd="50dp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textSize="20sp"
-                android:text="用户名"/>
+                android:text="用户名" />
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -125,14 +127,17 @@
                 android:layout_marginStart="20dp"
                 android:textSize="20sp"
                 android:text="个人信息"/>
-            <TextView
-                android:id="@+id/edit_introduce"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="50dp"
-                android:textSize="20sp"
-                android:text="个人信息" />
+
+        <TextView
+            android:id="@+id/edit_introduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="50dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="20sp"
+            android:text="个人信息" />
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"

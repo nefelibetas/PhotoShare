@@ -31,7 +31,6 @@ import okhttp3.Response;
 
 public class MySelfActivity extends AppCompatActivity {
     private ResourcesUtils resourcesUtils;
-    private Callback changeCallback;
     private Callback deleteCallback;
     private RecyclerView recyclerListMyself;
     private MyselfAdapter myselfAdapter;
@@ -45,27 +44,6 @@ public class MySelfActivity extends AppCompatActivity {
         getData();
     }
     public void initCallback() {
-        changeCallback = new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.d("fishCat", "changeCallback onFailure: " + e.getMessage());
-            }
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String body = response.body().string();
-                    Result<Object> result = HttpUtils.gson.fromJson(body, HttpUtils.resultType);
-                    if (result.getCode() != 200) {
-                        Log.d("fishCat", "changeCallback onResponse: code is not 200 and result " + result);
-                    } else {
-                        Log.d("fishCat", "onResponse: " + result);
-                        new Handler(Looper.getMainLooper()).post(() -> {
-                            ToastUtils.show(MySelfActivity.this, "发布成功");
-                        });
-                    }
-                }
-            }
-        };
         deleteCallback = new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -116,7 +94,7 @@ public class MySelfActivity extends AppCompatActivity {
                     } else {
                         Record records = result.getData();
                         new Handler(Looper.getMainLooper()).post(() -> {
-                            myselfAdapter = new MyselfAdapter(MySelfActivity.this, changeCallback, deleteCallback, records);
+                            myselfAdapter = new MyselfAdapter(MySelfActivity.this, deleteCallback, records);
                             recyclerListMyself.setAdapter(myselfAdapter);
                         });
                     }
