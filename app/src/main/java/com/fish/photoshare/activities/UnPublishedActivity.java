@@ -15,7 +15,7 @@ import com.fish.photoshare.R;
 import com.fish.photoshare.adapter.UnPublishedAdapter;
 import com.fish.photoshare.common.Api;
 import com.fish.photoshare.common.Result;
-import com.fish.photoshare.pojo.Record;
+import com.fish.photoshare.pojo.PostRecord;
 import com.fish.photoshare.utils.HttpUtils;
 import com.fish.photoshare.utils.ResourcesUtils;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
@@ -110,11 +110,12 @@ public class UnPublishedActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String body = response.body().string();
-                    Result<Record> result = HttpUtils.gson.fromJson(body, new TypeToken<Result<Record>>(){}.getType());
+                    Result<PostRecord> result = HttpUtils.gson.fromJson(body, new TypeToken<Result<PostRecord>>() {
+                    }.getType());
                     if (result.getCode() != 200) {
                         Log.d("fishCat", "getData onResponse: code is not 200");
                     } else {
-                        Record records = result.getData();
+                        PostRecord records = result.getData();
                         new Handler(Looper.getMainLooper()).post(() -> {
                             unPublishedAdapter = new UnPublishedAdapter(UnPublishedActivity.this, records, changeCallback, deleteCallback);
                             recyclerListUnPublished.setAdapter(unPublishedAdapter);

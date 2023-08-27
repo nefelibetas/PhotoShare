@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
 import com.fish.photoshare.common.Api;
-import com.fish.photoshare.pojo.Record;
-import com.fish.photoshare.pojo.RecordDetail;
+import com.fish.photoshare.pojo.PostDetail;
+import com.fish.photoshare.pojo.PostRecord;
 import com.fish.photoshare.utils.HttpUtils;
 import com.fish.photoshare.utils.ResourcesUtils;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
@@ -31,7 +31,7 @@ import okhttp3.Callback;
 
 public class UnPublishedAdapter extends RecyclerView.Adapter<UnPublishedAdapter.ViewHolder> {
     private Context context;
-    private Record records;
+    private PostRecord records;
     private Callback changeCallback;
     private Callback deleteCallback;
     private ResourcesUtils resourcesUtils;
@@ -39,7 +39,7 @@ public class UnPublishedAdapter extends RecyclerView.Adapter<UnPublishedAdapter.
     public UnPublishedAdapter() {
     }
 
-    public UnPublishedAdapter(Context context, Record records, Callback changeCallback, Callback deleteCallback) {
+    public UnPublishedAdapter(Context context, PostRecord records, Callback changeCallback, Callback deleteCallback) {
         this.context = context;
         this.records = records;
         this.changeCallback = changeCallback;
@@ -55,7 +55,7 @@ public class UnPublishedAdapter extends RecyclerView.Adapter<UnPublishedAdapter.
     }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        RecordDetail detail = records.getRecordDetail().get(position);
+        PostDetail detail = records.getRecordDetail().get(position);
         HashMap<String, String> publishParam = new HashMap<>();
         HashMap<String, String> deleteParam = new HashMap<>();
         String id = SharedPreferencesUtils.getString(context, resourcesUtils.ID, null);
@@ -106,7 +106,6 @@ public class UnPublishedAdapter extends RecyclerView.Adapter<UnPublishedAdapter.
     public int getItemCount() {
         return records.getRecordDetail().size();
     }
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView myselfCard;
         private final ShapeableImageView PostImage;

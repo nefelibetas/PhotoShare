@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
 import com.fish.photoshare.common.Api;
-import com.fish.photoshare.pojo.Record;
-import com.fish.photoshare.pojo.RecordDetail;
+import com.fish.photoshare.pojo.PostDetail;
+import com.fish.photoshare.pojo.PostRecord;
 import com.fish.photoshare.utils.HttpUtils;
 import com.fish.photoshare.utils.ResourcesUtils;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
@@ -32,11 +32,11 @@ public class MyselfAdapter extends RecyclerView.Adapter<MyselfAdapter.ViewHolder
     private Context context;
     private ResourcesUtils resourcesUtils;
     private Callback deleteCallback;
-    private Record records;
+    private PostRecord records;
     public MyselfAdapter() {
     }
 
-    public MyselfAdapter(Context context, Callback deleteCallback, Record records) {
+    public MyselfAdapter(Context context, Callback deleteCallback, PostRecord records) {
         this.context = context;
         this.deleteCallback = deleteCallback;
         this.records = records;
@@ -51,7 +51,7 @@ public class MyselfAdapter extends RecyclerView.Adapter<MyselfAdapter.ViewHolder
     }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        RecordDetail detail = records.getRecordDetail().get(position);
+        PostDetail detail = records.getRecordDetail().get(position);
         HashMap<String, String> deleteParam = new HashMap<>();
         String id = SharedPreferencesUtils.getString(context, resourcesUtils.ID, null);
         // 点击即可查看

@@ -10,17 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fish.photoshare.R;
-import com.fish.photoshare.pojo.Record;
+import com.fish.photoshare.pojo.PostRecord;
 import com.google.android.material.imageview.ShapeableImageView;
 
 public class StarAdapter extends RecyclerView.Adapter<StarAdapter.ViewHolder> {
     private Context context;
-    private Record record;
-    public StarAdapter(){}
-    public StarAdapter(Context context, Record record) {
-        this.context = context;
-        this.record = record;
+    private PostRecord postRecord;
+
+    public StarAdapter() {
     }
+
+    public StarAdapter(Context context, PostRecord postRecord) {
+        this.context = context;
+        this.postRecord = postRecord;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
