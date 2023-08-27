@@ -47,20 +47,17 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         this.records = records;
         resourcesUtils = new ResourcesUtils(context);
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_home_item, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PostDetail detail = records.getRecordDetail().get(position);
         initView(holder, detail);
     }
-
     protected void initView(ViewHolder holder, PostDetail detail) {
         holder.userNameText.setText(detail.getUsername());
         holder.TitleText.setText(detail.getTitle());
@@ -96,14 +93,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         initImage(holder.RecyclerListImagePost, detail.getImageUrlList());
         initClickListener(holder, detail);
     }
-
     protected void initImage(RecyclerView recyclerView, ArrayList<String> list) {
         GridLayoutManager manager = new GridLayoutManager(this.context, 3);
         recyclerView.setLayoutManager(manager);
         ImageAdapter imageAdapter = new ImageAdapter(context, list);
         recyclerView.setAdapter(imageAdapter);
     }
-
     protected void initClickListener(ViewHolder holder, PostDetail detail) {
         // 点击卡片
         holder.PostItem.setOnClickListener(v -> {
@@ -309,12 +304,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             }
         });
     }
-
     @Override
     public int getItemCount() {
         return records.getRecordDetail().size();
     }
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView PostItem;
         private final TextView userNameText;

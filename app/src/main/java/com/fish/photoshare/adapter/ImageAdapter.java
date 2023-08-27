@@ -20,19 +20,16 @@ import java.util.ArrayList;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
     private Context context;
     private ArrayList<String> imageUrlList;
-
     public ImageAdapter(Context context, ArrayList<String> list) {
         this.context = context;
         this.imageUrlList = list;
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_post_image_item, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Uri uri = Uri.parse(imageUrlList.get(position));
@@ -41,15 +38,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                 .centerCrop()
                 .into(holder.image));
     }
-
     @Override
     public int getItemCount() {
         return imageUrlList.size();
     }
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ShapeableImageView image;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.PostImageItem);
