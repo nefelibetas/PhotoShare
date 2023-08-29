@@ -26,10 +26,6 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.imageview.ShapeableImageView;
 public class UserFragment extends Fragment implements View.OnClickListener {
     private User information;
-    private MaterialCardView editCard;
-    private MaterialCardView unpublishedCard;
-    private MaterialCardView starCard;
-    private MaterialCardView publishCard;
     private TextView username;
     private ShapeableImageView avatar;
     public static UserFragment newInstance() {
@@ -62,10 +58,10 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         return rootView;
     }
     private void initView(View rootView) {
-        editCard = rootView.findViewById(R.id.editCard);
-        starCard = rootView.findViewById(R.id.starCard);
-        unpublishedCard = rootView.findViewById(R.id.unpublishedCard);
-        publishCard = rootView.findViewById(R.id.publishedCard);
+        MaterialCardView editCard = rootView.findViewById(R.id.editCard);
+        MaterialCardView starCard = rootView.findViewById(R.id.starCard);
+        MaterialCardView unpublishedCard = rootView.findViewById(R.id.unpublishedCard);
+        MaterialCardView publishCard = rootView.findViewById(R.id.publishedCard);
         username = rootView.findViewById(R.id.tv_username);
         avatar = rootView.findViewById(R.id.ic_avatar);
         editCard.setOnClickListener(this);

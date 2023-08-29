@@ -24,7 +24,11 @@ import com.fish.photoshare.utils.ResourcesUtils;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 
 import okhttp3.Call;
@@ -37,6 +41,22 @@ public class HomeFragment extends Fragment implements onChangePostState {
     private RecyclerView HomeRecyclerList;
     private PostRecord record;
     public HomeFragment() {}
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+    @Subscribe
+    public void onPostStateChange(int position) {
+        onChangePostState(position);
+        Log.d("fishCat", "onPostStateChange: " + position);
+    }
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -102,8 +122,7 @@ public class HomeFragment extends Fragment implements onChangePostState {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String body = response.body().string();
-                    Result<PostRecord> result = HttpUtils.gson.fromJson(body, new TypeToken<Result<PostRecord>>() {
-                    }.getType());
+                    Result<PostRecord> result = HttpUtils.gson.fromJson(body, new TypeToken<Result<PostRecord>>() {}.getType());
                     if (result.getCode() != 200) {
                         Log.e("fishCat", "getShare onResponse: " + result);
                     } else {
@@ -117,4 +136,3 @@ public class HomeFragment extends Fragment implements onChangePostState {
             }
         });
     }
-}
