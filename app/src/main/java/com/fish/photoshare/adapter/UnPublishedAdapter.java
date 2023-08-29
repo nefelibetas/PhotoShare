@@ -104,7 +104,7 @@ public class UnPublishedAdapter extends RecyclerView.Adapter<UnPublishedAdapter.
     }
     @Override
     public int getItemCount() {
-        return records.getRecordDetail().size();
+        return records == null ? 0 : records.getRecordDetail().size();
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView myselfCard;
