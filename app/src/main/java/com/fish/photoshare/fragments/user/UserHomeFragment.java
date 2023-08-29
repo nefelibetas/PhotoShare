@@ -16,9 +16,8 @@ import com.fish.photoshare.pojo.User;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
 
 public class UserHomeFragment extends Fragment {
-    private UserHomeFragmentModel userHomeFragmentModel;
-    private User user;
     private GalleryAndCameraListenerForAvatar galleryAndCameraListenerForAvatar;
+    private User user;
     public UserHomeFragment() {}
     public UserHomeFragment(GalleryAndCameraListenerForAvatar listener) {
         galleryAndCameraListenerForAvatar = listener;
@@ -46,7 +45,7 @@ public class UserHomeFragment extends Fragment {
     }
     public void initView(View rootView) {
         // initModel
-        userHomeFragmentModel = new UserHomeFragmentModel(getContext());
+        UserHomeFragmentModel userHomeFragmentModel = new UserHomeFragmentModel(getContext());
         userHomeFragmentModel.initModel(rootView, galleryAndCameraListenerForAvatar);
         userHomeFragmentModel.initOnClickListener();
         userHomeFragmentModel.initData(user);
