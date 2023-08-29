@@ -22,23 +22,28 @@
         android:theme="@style/Theme.PhotoShare"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.PostInformationActivity"
+            android:exported="false"
+            android:launchMode="singleInstance"/>
+        <activity
             android:name=".activities.UnPublishedActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".activities.MySelfActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".activities.StarActivity"
             android:exported="false" />
         <activity
             android:name=".activities.UserInformationActivity"
             android:exported="false"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleTop"/>
         <activity
             android:name=".activities.EntranceActivity"
             android:exported="false"
-            android:label="@string/title_activity_entrance"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.PhotoShare" />
         <activity
             android:name=".activities.MainActivity"
@@ -50,7 +55,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.fish.photoshare.provider"
