@@ -1,7 +1,9 @@
 package com.fish.photoshare.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -19,8 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
+import com.fish.photoshare.activities.PostInformationActivity;
 import com.fish.photoshare.common.Api;
 import com.fish.photoshare.common.Result;
+import com.fish.photoshare.common.onChangePostHandler;
 import com.fish.photoshare.common.onChangePostState;
 import com.fish.photoshare.pojo.PostDetail;
 import com.fish.photoshare.pojo.PostRecord;
@@ -31,6 +35,7 @@ import com.fish.photoshare.utils.ToastUtils;
 import com.google.android.material.card.MaterialCardView;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -42,7 +47,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private final Context context;
     private PostRecord records;
     private final ResourcesUtils resourcesUtils;
-    private final onChangePostState listener;
+    public final onChangePostState listener;
     public HomeAdapter(Context Context, PostRecord records, onChangePostState listener) {
         this.context = Context;
         this.records = records;
@@ -89,11 +94,23 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             holder.Focus.setBackgroundColor(ContextCompat.getColor(context, R.color.prompt_transparent));
             holder.FocusText.setText("已关注");
         }
+        // 是否收藏
+        boolean hasCollect = detail.isHasCollect();
+        if (hasCollect) {
+            new Handler(Looper.getMainLooper()).post(() -> Glide.with(context)
+                    .load(R.drawable.baseline_star_24)
+                    .centerCrop()
+                    .into(holder.StarIcon));
+        } else {
+            new Handler(Looper.getMainLooper()).post(() -> Glide.with(context)
+                    .load(R.drawable.outline_star_border_24)
+                    .centerCrop()
+                    .into(holder.StarIcon));
+        }
         // 收藏数量
         String collectNum = detail.getCollectNum();
         if (collectNum != null && !collectNum.equals("0")) {
             holder.StarNumber.setText(collectNum);
-            holder.StarIcon.setImageResource(R.drawable.baseline_star_24);
         } else {
             holder.StarNumber.setText("0");
         }
@@ -109,7 +126,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     protected void initClickListener(ViewHolder holder, PostDetail detail, int position) {
         // 点击卡片
         holder.PostItem.setOnClickListener(v -> {
-
+            Intent intent = new Intent(context, PostInformationActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("detail", detail);
+            bundle.putInt("position", position);
+            intent.putExtras(bundle);
+            context.startActivity(intent);
         });
         // 点击关注
         holder.Focus.setOnClickListener(v -> {
@@ -239,7 +261,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                         }
                     }
                 });
-
             }
         });
         // 点赞

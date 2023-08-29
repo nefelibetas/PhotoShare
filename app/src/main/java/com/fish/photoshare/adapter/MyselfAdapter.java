@@ -33,16 +33,12 @@ public class MyselfAdapter extends RecyclerView.Adapter<MyselfAdapter.ViewHolder
     private ResourcesUtils resourcesUtils;
     private Callback deleteCallback;
     private PostRecord records;
-    public MyselfAdapter() {
-    }
-
     public MyselfAdapter(Context context, Callback deleteCallback, PostRecord records) {
         this.context = context;
         this.deleteCallback = deleteCallback;
         this.records = records;
         this.resourcesUtils = new ResourcesUtils(context);
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -88,9 +84,8 @@ public class MyselfAdapter extends RecyclerView.Adapter<MyselfAdapter.ViewHolder
     }
     @Override
     public int getItemCount() {
-        return records.getRecordDetail().size();
+        return records == null ? 0 : records.getRecordDetail().size();
     }
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView myselfCard;
         private final ShapeableImageView PostImage;
