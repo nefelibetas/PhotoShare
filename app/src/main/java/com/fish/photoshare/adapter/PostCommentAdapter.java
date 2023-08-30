@@ -50,7 +50,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<PostCommentAdapter.
 
     public void setDetails(ArrayList<CommentDetail> details) {
         this.details = details;
-        new Handler(Looper.getMainLooper()).post(() -> notifyAll());
+        new Handler(Looper.getMainLooper()).post(() -> notifyDataSetChanged());
     }
 
     @NonNull
