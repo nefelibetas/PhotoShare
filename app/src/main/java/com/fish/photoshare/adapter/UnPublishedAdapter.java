@@ -1,7 +1,9 @@
 package com.fish.photoshare.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
+import com.fish.photoshare.activities.PostInformationActivity;
 import com.fish.photoshare.common.Api;
 import com.fish.photoshare.pojo.PostDetail;
 import com.fish.photoshare.pojo.PostRecord;
@@ -61,7 +64,12 @@ public class UnPublishedAdapter extends RecyclerView.Adapter<UnPublishedAdapter.
         String id = SharedPreferencesUtils.getString(context, resourcesUtils.ID, null);
         // 点击即可查看
         holder.myselfCard.setOnClickListener(v -> {
-
+            Intent intent = new Intent(context, PostInformationActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("detail", detail);
+            bundle.putString("from", "unPublish");
+            intent.putExtras(bundle);
+            context.startActivity(intent);
         });
         // 删除
         holder.deleteButton.setOnClickListener(v -> {
@@ -104,7 +112,7 @@ public class UnPublishedAdapter extends RecyclerView.Adapter<UnPublishedAdapter.
     }
     @Override
     public int getItemCount() {
-        return records.getRecordDetail().size();
+        return records == null ? 0 : records.getRecordDetail().size();
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView myselfCard;

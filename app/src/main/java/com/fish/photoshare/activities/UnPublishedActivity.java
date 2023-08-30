@@ -116,8 +116,12 @@ public class UnPublishedActivity extends AppCompatActivity {
                         Log.d("fishCat", "getData onResponse: code is not 200");
                     } else {
                         PostRecord records = result.getData();
-                        new Handler(Looper.getMainLooper()).post(() -> {
+                        if (records != null) {
                             unPublishedAdapter = new UnPublishedAdapter(UnPublishedActivity.this, records, changeCallback, deleteCallback);
+                        } else {
+                            unPublishedAdapter = new UnPublishedAdapter(UnPublishedActivity.this, null, changeCallback, deleteCallback);
+                        }
+                        new Handler(Looper.getMainLooper()).post(() -> {
                             recyclerListUnPublished.setAdapter(unPublishedAdapter);
                         });
                     }

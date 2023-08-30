@@ -6,10 +6,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/starItem"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         app:strokeWidth="0dp"
         app:cardCornerRadius="0dp"
+        android:clickable="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +29,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:src="@drawable/outline_photo_camera_24"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -34,30 +37,53 @@
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
                 android:paddingEnd="5dp"
-                app:layout_constraintWidth_percent="0.78"
+                app:layout_constraintWidth_percent="0.45"
                 app:layout_constraintStart_toEndOf="@+id/PostImage"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent">
+
                 <TextView
                     android:id="@+id/textTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="标题"
                     android:textSize="25sp"
+                    android:ellipsize="end"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
                     android:id="@+id/textContent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="内容"
+                    android:ellipsize="end"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textTitle"/>
+                    app:layout_constraintTop_toBottomOf="@+id/textTitle" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.33"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/unCollectButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="取消收藏"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:backgroundTint="@color/yellow" />
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
     <com.google.android.material.divider.MaterialDivider

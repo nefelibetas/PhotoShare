@@ -49,8 +49,6 @@ public class UserInformationActivity extends AppCompatActivity implements Galler
     // 用来拿到Key的
     private ResourcesUtils resourcesUtils;
     private FragmentManager manager;
-    private UserHomeFragment userHomeFragment;
-    // 用户头像，从Model传来的
     private ShapeableImageView user_avatar;
     // 返回按钮
     private ImageView iv_back;
@@ -68,7 +66,7 @@ public class UserInformationActivity extends AppCompatActivity implements Galler
         initView();
         initCallBack();
         initLauncher();
-        userHomeFragment = UserHomeFragment.newInstance(this);
+        UserHomeFragment userHomeFragment = UserHomeFragment.newInstance(this);
         manager.beginTransaction()
                 .add(R.id.userFragmentContainer, userHomeFragment)
                 .commit();

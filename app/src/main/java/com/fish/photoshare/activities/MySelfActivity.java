@@ -94,8 +94,12 @@ public class MySelfActivity extends AppCompatActivity {
                         Log.d("fishCat", "myselfCallback onResponse: code is not 200");
                     } else {
                         PostRecord records = result.getData();
-                        new Handler(Looper.getMainLooper()).post(() -> {
+                        if (records != null) {
                             myselfAdapter = new MyselfAdapter(MySelfActivity.this, deleteCallback, records);
+                        } else {
+                            myselfAdapter = new MyselfAdapter(MySelfActivity.this, deleteCallback, null);
+                        }
+                        new Handler(Looper.getMainLooper()).post(() -> {
                             recyclerListMyself.setAdapter(myselfAdapter);
                         });
                     }

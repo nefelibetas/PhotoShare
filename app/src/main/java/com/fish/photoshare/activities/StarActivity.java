@@ -1,6 +1,8 @@
 package com.fish.photoshare.activities;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -30,30 +32,28 @@ public class StarActivity extends AppCompatActivity {
     private ResourcesUtils resourcesUtils;
     private RecyclerView recyclerListStar;
     private StarAdapter starAdapter;
-    private ImageView back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_star);
-        initCallback();
-        initParams();
+        initView();
         getData();
     }
-    public void initCallback() {
 
-    }
-    public void initParams() {
+    public void initView() {
         resourcesUtils = new ResourcesUtils(StarActivity.this);
         recyclerListStar = findViewById(R.id.recyclerListStar);
         recyclerListStar.setLayoutManager(new LinearLayoutManager(StarActivity.this));
-        back = findViewById(R.id.icon_back);
+        starAdapter = null;
+        ImageView back = findViewById(R.id.icon_back);
         back.setOnClickListener(v -> {
             finish();
         });
     }
-    public void getData(){
+
+    public void getData() {
         HashMap<String, String> params = new HashMap<>();
-        resourcesUtils = new ResourcesUtils(StarActivity.this);
         String id = SharedPreferencesUtils.getString(StarActivity.this, resourcesUtils.ID, null);
         params.put("userId", id);
         HttpUtils.sendGetRequest(Api.COLLECT, params, new Callback() {
@@ -61,6 +61,7 @@ public class StarActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.d("fishCat", "starCallback onFailure: " + e.getMessage());
             }
+
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
@@ -70,7 +71,15 @@ public class StarActivity extends AppCompatActivity {
                     if (result.getCode() != 200) {
                         Log.d("fishCat", "starCallback onResponse: code is not 200");
                     } else {
-//                        starAdapter = new StarAdapter(StarActivity.this, );
+                        PostRecord records = result.getData();
+                        if (records != null) {
+                            starAdapter = new StarAdapter(StarActivity.this, records);
+                        } else {
+                            starAdapter = new StarAdapter(StarActivity.this, null);
+                        }
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            recyclerListStar.setAdapter(starAdapter);
+                        });
                     }
                 }
             }

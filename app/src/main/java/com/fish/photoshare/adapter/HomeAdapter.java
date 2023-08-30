@@ -1,7 +1,9 @@
 package com.fish.photoshare.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -19,8 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
+import com.fish.photoshare.activities.PostInformationActivity;
 import com.fish.photoshare.common.Api;
 import com.fish.photoshare.common.Result;
+import com.fish.photoshare.common.onChangePostState;
 import com.fish.photoshare.pojo.PostDetail;
 import com.fish.photoshare.pojo.PostRecord;
 import com.fish.photoshare.utils.HttpUtils;
@@ -38,27 +42,32 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
-    private Context context;
+    private final Context context;
     private PostRecord records;
-    private ResourcesUtils resourcesUtils;
+    private final ResourcesUtils resourcesUtils;
+    public final onChangePostState listener;
 
-    public HomeAdapter(Context Context, PostRecord records) {
+    public HomeAdapter(Context Context, PostRecord records, onChangePostState listener) {
         this.context = Context;
         this.records = records;
-        resourcesUtils = new ResourcesUtils(context);
+        this.listener = listener;
+        this.resourcesUtils = new ResourcesUtils(context);
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_home_item, parent, false);
         return new ViewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PostDetail detail = records.getRecordDetail().get(position);
-        initView(holder, detail);
+        initView(holder, detail, position);
     }
-    protected void initView(ViewHolder holder, PostDetail detail) {
+
+    protected void initView(ViewHolder holder, PostDetail detail, int position) {
         holder.userNameText.setText(detail.getUsername());
         holder.TitleText.setText(detail.getTitle());
         // 当前用户是否点赞
@@ -66,6 +75,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         if (hasLike) {
             new Handler(Looper.getMainLooper()).post(() -> Glide.with(context)
                     .load(R.drawable.baseline_thumb_up_alt_24)
+                    .centerCrop()
+                    .into(holder.UpIcon));
+        } else {
+            new Handler(Looper.getMainLooper()).post(() -> Glide.with(context)
+                    .load(R.drawable.outline_thumb_up_off_alt_24)
                     .centerCrop()
                     .into(holder.UpIcon));
         }
@@ -82,27 +96,45 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             holder.Focus.setBackgroundColor(ContextCompat.getColor(context, R.color.prompt_transparent));
             holder.FocusText.setText("已关注");
         }
+        // 是否收藏
+        boolean hasCollect = detail.isHasCollect();
+        if (hasCollect) {
+            new Handler(Looper.getMainLooper()).post(() -> Glide.with(context)
+                    .load(R.drawable.baseline_star_24)
+                    .centerCrop()
+                    .into(holder.StarIcon));
+        } else {
+            new Handler(Looper.getMainLooper()).post(() -> Glide.with(context)
+                    .load(R.drawable.outline_star_border_24)
+                    .centerCrop()
+                    .into(holder.StarIcon));
+        }
         // 收藏数量
         String collectNum = detail.getCollectNum();
         if (collectNum != null && !collectNum.equals("0")) {
             holder.StarNumber.setText(collectNum);
-            holder.StarIcon.setImageResource(R.drawable.baseline_star_24);
         } else {
             holder.StarNumber.setText("0");
         }
         initImage(holder.RecyclerListImagePost, detail.getImageUrlList());
-        initClickListener(holder, detail);
+        initClickListener(holder, detail, position);
     }
+
     protected void initImage(RecyclerView recyclerView, ArrayList<String> list) {
         GridLayoutManager manager = new GridLayoutManager(this.context, 3);
         recyclerView.setLayoutManager(manager);
         ImageAdapter imageAdapter = new ImageAdapter(context, list);
         recyclerView.setAdapter(imageAdapter);
     }
-    protected void initClickListener(ViewHolder holder, PostDetail detail) {
+
+    protected void initClickListener(ViewHolder holder, PostDetail detail, int position) {
         // 点击卡片
         holder.PostItem.setOnClickListener(v -> {
-
+            Intent intent = new Intent(context, PostInformationActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("detail", detail);
+            intent.putExtras(bundle);
+            context.startActivity(intent);
         });
         // 点击关注
         holder.Focus.setOnClickListener(v -> {
@@ -184,7 +216,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                     public void onFailure(@NonNull Call call, @NonNull IOException e) {
                         Log.e("fishCat", "取消收藏失败 onFailure: ", e);
                     }
-
                     @Override
                     public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                         if (response.isSuccessful()) {
@@ -198,7 +229,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                                     String starNumberText = starNumber + "";
                                     holder.StarNumber.setText(starNumberText);
                                     detail.setHasCollect(false);
-                                    Log.d("fishCat", "取消收藏 onResponse: " + result);
+                                    detail.setCollectId(null);
                                 });
                             }
                         }
@@ -206,7 +237,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                 });
             } else {
                 HashMap<String, String> collectParams = new HashMap<>();
-                collectParams.put("userId", detail.getPUserId());
+                String id = SharedPreferencesUtils.getString(context, resourcesUtils.ID, null);
+                collectParams.put("userId", id);
                 collectParams.put("shareId", detail.getId());
                 String newUrl = HttpUtils.getRequestHandler(Api.COLLECT, collectParams);
                 HttpUtils.sendPostRequest(newUrl, null, new Callback() {
@@ -228,13 +260,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                                     String starNumberText = starNumber + "";
                                     holder.StarNumber.setText(starNumberText);
                                     detail.setHasCollect(true);
-                                    Log.d("fishCat", "收藏 onResponse: " + result);
+                                    listener.onChangePostState(position);
                                 });
                             }
                         }
                     }
                 });
-
             }
         });
         // 点赞
@@ -242,13 +273,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             if (detail.isHasLike()) {
                 HashMap<String, String> unLikeParams = new HashMap<>();
                 unLikeParams.put("likeId", detail.getLikeId());
+                Log.d("fishCat", "取消点赞 detail: " + detail);
                 String newUrl = HttpUtils.getRequestHandler(Api.LIKE_CANCEL, unLikeParams);
                 HttpUtils.sendPostRequest(newUrl, null, new Callback() {
                     @Override
                     public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                        Log.e("fishCat", "取消关注 onFailure: ", e);
+                        Log.e("fishCat", "取消点赞 onFailure: ", e);
                     }
-
                     @Override
                     public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                         if (response.isSuccessful()) {
@@ -257,13 +288,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                             if (result.getCode() != 200) {
                                 Log.e("fishCat", "取消点赞 onResponse: " + response, new Exception("取消点赞失败"));
                             } else {
-                                Log.d("fishCat", "取消点赞 onResponse: " + result);
                                 new Handler(Looper.getMainLooper()).post(() -> {
                                     holder.UpIcon.setImageResource(R.drawable.outline_thumb_up_off_alt_24);
                                     int upNumber = Integer.parseInt(holder.UpNumber.getText().toString()) - 1;
                                     String upNumberText = upNumber + "";
                                     holder.UpNumber.setText(upNumberText);
                                     detail.setHasLike(false);
+                                    detail.setLikeId(null);
                                 });
                             }
                         }
@@ -272,7 +303,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             } else {
                 // 点赞
                 HashMap<String, String> likeParams = new HashMap<>();
-                likeParams.put("userId", detail.getPUserId());
+                String id = SharedPreferencesUtils.getString(context, resourcesUtils.ID, null);
+                likeParams.put("userId", id);
                 likeParams.put("shareId", detail.getId());
                 String newUrl = HttpUtils.getRequestHandler(Api.LIKE, likeParams);
                 HttpUtils.sendPostRequest(newUrl, null, new Callback() {
@@ -289,13 +321,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                             if (result.getCode() != 200) {
                                 Log.e("fishCat", "点赞 onResponse: " + result, new Exception("点赞失败"));
                             } else {
-                                Log.d("fishCat", "点赞 onResponse: " + result);
                                 new Handler(Looper.getMainLooper()).post(() -> {
                                     holder.UpIcon.setImageResource(R.drawable.baseline_thumb_up_alt_24);
                                     int upNumber = Integer.parseInt(holder.UpNumber.getText().toString()) + 1;
                                     String upNumberText = upNumber + "";
                                     holder.UpNumber.setText(upNumberText);
                                     detail.setHasLike(true);
+                                    listener.onChangePostState(position);
                                 });
                             }
                         }
@@ -304,10 +336,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return records.getRecordDetail().size();
     }
+
+    public void updateData(PostRecord records) {
+        this.records = records;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView PostItem;
         private final TextView userNameText;
