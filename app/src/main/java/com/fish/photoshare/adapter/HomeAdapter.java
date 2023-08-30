@@ -24,7 +24,6 @@ import com.fish.photoshare.R;
 import com.fish.photoshare.activities.PostInformationActivity;
 import com.fish.photoshare.common.Api;
 import com.fish.photoshare.common.Result;
-import com.fish.photoshare.common.onChangePostHandler;
 import com.fish.photoshare.common.onChangePostState;
 import com.fish.photoshare.pojo.PostDetail;
 import com.fish.photoshare.pojo.PostRecord;
@@ -35,7 +34,6 @@ import com.fish.photoshare.utils.ToastUtils;
 import com.google.android.material.card.MaterialCardView;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -48,23 +46,27 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private PostRecord records;
     private final ResourcesUtils resourcesUtils;
     public final onChangePostState listener;
+
     public HomeAdapter(Context Context, PostRecord records, onChangePostState listener) {
         this.context = Context;
         this.records = records;
         this.listener = listener;
         this.resourcesUtils = new ResourcesUtils(context);
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_home_item, parent, false);
         return new ViewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PostDetail detail = records.getRecordDetail().get(position);
         initView(holder, detail, position);
     }
+
     protected void initView(ViewHolder holder, PostDetail detail, int position) {
         holder.userNameText.setText(detail.getUsername());
         holder.TitleText.setText(detail.getTitle());
@@ -117,19 +119,20 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         initImage(holder.RecyclerListImagePost, detail.getImageUrlList());
         initClickListener(holder, detail, position);
     }
+
     protected void initImage(RecyclerView recyclerView, ArrayList<String> list) {
         GridLayoutManager manager = new GridLayoutManager(this.context, 3);
         recyclerView.setLayoutManager(manager);
         ImageAdapter imageAdapter = new ImageAdapter(context, list);
         recyclerView.setAdapter(imageAdapter);
     }
+
     protected void initClickListener(ViewHolder holder, PostDetail detail, int position) {
         // 点击卡片
         holder.PostItem.setOnClickListener(v -> {
             Intent intent = new Intent(context, PostInformationActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("detail", detail);
-            bundle.putInt("position", position);
             intent.putExtras(bundle);
             context.startActivity(intent);
         });
@@ -234,7 +237,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                 });
             } else {
                 HashMap<String, String> collectParams = new HashMap<>();
-                collectParams.put("userId", detail.getPUserId());
+                String id = SharedPreferencesUtils.getString(context, resourcesUtils.ID, null);
+                collectParams.put("userId", id);
                 collectParams.put("shareId", detail.getId());
                 String newUrl = HttpUtils.getRequestHandler(Api.COLLECT, collectParams);
                 HttpUtils.sendPostRequest(newUrl, null, new Callback() {
@@ -242,6 +246,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                     public void onFailure(@NonNull Call call, @NonNull IOException e) {
                         Log.e("fishCat", "收藏失败 onFailure: ", e);
                     }
+
                     @Override
                     public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                         if (response.isSuccessful()) {
@@ -298,15 +303,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             } else {
                 // 点赞
                 HashMap<String, String> likeParams = new HashMap<>();
-                likeParams.put("userId", detail.getPUserId());
+                String id = SharedPreferencesUtils.getString(context, resourcesUtils.ID, null);
+                likeParams.put("userId", id);
                 likeParams.put("shareId", detail.getId());
-                Log.d("fishCat", "点赞 detail: " + detail);
                 String newUrl = HttpUtils.getRequestHandler(Api.LIKE, likeParams);
                 HttpUtils.sendPostRequest(newUrl, null, new Callback() {
                     @Override
                     public void onFailure(@NonNull Call call, @NonNull IOException e) {
                         Log.e("fishCat", "点赞 onFailure: ", e);
                     }
+
                     @Override
                     public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                         if (response.isSuccessful()) {
@@ -330,13 +336,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return records.getRecordDetail().size();
     }
+
     public void updateData(PostRecord records) {
         this.records = records;
     }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialCardView PostItem;
         private final TextView userNameText;

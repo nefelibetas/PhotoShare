@@ -32,6 +32,7 @@ public class StarActivity extends AppCompatActivity {
     private ResourcesUtils resourcesUtils;
     private RecyclerView recyclerListStar;
     private StarAdapter starAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +40,7 @@ public class StarActivity extends AppCompatActivity {
         initView();
         getData();
     }
+
     public void initView() {
         resourcesUtils = new ResourcesUtils(StarActivity.this);
         recyclerListStar = findViewById(R.id.recyclerListStar);
@@ -49,7 +51,8 @@ public class StarActivity extends AppCompatActivity {
             finish();
         });
     }
-    public void getData(){
+
+    public void getData() {
         HashMap<String, String> params = new HashMap<>();
         String id = SharedPreferencesUtils.getString(StarActivity.this, resourcesUtils.ID, null);
         params.put("userId", id);
@@ -58,6 +61,7 @@ public class StarActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.d("fishCat", "starCallback onFailure: " + e.getMessage());
             }
+
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {

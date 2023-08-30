@@ -1,18 +1,20 @@
 package com.fish.photoshare.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.fish.photoshare.R;
 import com.fish.photoshare.adapter.ImageAdapter;
@@ -40,16 +42,20 @@ public class PostInformationActivity extends AppCompatActivity {
     private PostDetail detail;
     private CommentRecord commentRecord;
     private PostCommentAdapter commentAdapter;
+    private String from = null;
     private boolean isInit = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         resourcesUtils = new ResourcesUtils(PostInformationActivity.this);
         Bundle bundle = getIntent().getExtras();
         detail = bundle.getSerializable("detail", PostDetail.class);
+        from = bundle.getString("from");
         setContentView(R.layout.activity_post_information);
         initCommentData();
     }
+
     protected void initCommentData() {
         HashMap<String, String> params = new HashMap<>();
         params.put("shareId", detail.getId());
@@ -58,10 +64,12 @@ public class PostInformationActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e("fishCat", "初始化评论信息 onFailure: ", e);
             }
+
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
-                     Result<CommentRecord> result = HttpUtils.gson.fromJson(response.body().string(), new TypeToken<Result<CommentRecord>>(){}.getType());
+                    Result<CommentRecord> result = HttpUtils.gson.fromJson(response.body().string(), new TypeToken<Result<CommentRecord>>() {
+                    }.getType());
                     if (result.getCode() != 200) {
                         Log.e("fishCat", "初始化评论信息失败 onResponse: ", new Exception("初始化评论信息失败"));
                     } else {
@@ -73,7 +81,7 @@ public class PostInformationActivity extends AppCompatActivity {
                             if (!isInit) {
                                 initView();
                             } else {
-                                commentAdapter.notifyDataSetChanged();
+                                commentAdapter.setDetails(commentRecord.getRecords());
                             }
                         });
                     }
@@ -81,12 +89,14 @@ public class PostInformationActivity extends AppCompatActivity {
             }
         });
     }
+
     protected void setMain() {
         TextView titleText = findViewById(R.id.PostTitle);
         titleText.setText(detail.getTitle());
         TextView contentText = findViewById(R.id.PostContent);
         contentText.setText(detail.getContent());
     }
+
     protected void setRecyclerList() {
         RecyclerView recyclerListPostImages = findViewById(R.id.PostImages);
         ImageAdapter imageAdapter = new ImageAdapter(PostInformationActivity.this, detail.getImageUrlList());
@@ -97,7 +107,13 @@ public class PostInformationActivity extends AppCompatActivity {
         commentAdapter = new PostCommentAdapter(PostInformationActivity.this, commentRecord);
         recyclerListPostComment.setAdapter(commentAdapter);
     }
+
     protected void commentHandler() {
+        ConstraintLayout postLayoutBottom = findViewById(R.id.postLayoutBottom);
+        if (from != null)
+            postLayoutBottom.setVisibility(View.GONE);
+        else
+            postLayoutBottom.setVisibility(View.VISIBLE);
         EditText postCommentInput = findViewById(R.id.PostCommentInput);
         MaterialButton postBottomButton = findViewById(R.id.PostBottomButton);
         postBottomButton.setOnClickListener(v -> {
@@ -112,8 +128,9 @@ public class PostInformationActivity extends AppCompatActivity {
             HttpUtils.sendPostRequest(Api.FIRST, params, new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    Log.e("fishCat", "onFailure: ", e);
+                    Log.e("fishCat", "发布一级评论失败 onFailure: ", e);
                 }
+
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()) {
@@ -130,6 +147,7 @@ public class PostInformationActivity extends AppCompatActivity {
             });
         });
     }
+
     protected void initView() {
         ImageView back = findViewById(R.id.icon_back);
         back.setOnClickListener(v -> {

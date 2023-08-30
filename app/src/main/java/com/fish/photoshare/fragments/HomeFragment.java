@@ -24,9 +24,6 @@ import com.fish.photoshare.utils.ResourcesUtils;
 import com.fish.photoshare.utils.SharedPreferencesUtils;
 import com.google.gson.reflect.TypeToken;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -39,26 +36,7 @@ public class HomeFragment extends Fragment implements onChangePostState {
     private HomeAdapter homeAdapter;
     private RecyclerView HomeRecyclerList;
     private PostRecord record;
-
     public HomeFragment() {
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe
-    public void onPostStateChange(int position) {
-        onChangePostState(position);
-        Log.d("fishCat", "onPostStateChange: " + position);
     }
 
     public static HomeFragment newInstance() {
@@ -67,13 +45,11 @@ public class HomeFragment extends Fragment implements onChangePostState {
         fragment.setArguments(args);
         return fragment;
     }
-
     public void initView(View rootView) {
         HomeRecyclerList = rootView.findViewById(R.id.recyclerListHome);
         HomeRecyclerList.setLayoutManager(new LinearLayoutManager(getContext()));
         homeAdapter = null;
     }
-
     public void getShare() {
         String id = SharedPreferencesUtils.getString(getContext(), resourcesUtils.ID, null);
         HashMap<String, String> params = new HashMap<>();
@@ -83,7 +59,6 @@ public class HomeFragment extends Fragment implements onChangePostState {
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e("fishCat", "getShare onFailure: " + e.getMessage());
             }
-
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
@@ -103,13 +78,11 @@ public class HomeFragment extends Fragment implements onChangePostState {
             }
         });
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         resourcesUtils = new ResourcesUtils(getContext());
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
@@ -117,7 +90,6 @@ public class HomeFragment extends Fragment implements onChangePostState {
         getShare();
         return rootView;
     }
-
     @Override
     public void onChangePostState(int position) {
         String id = SharedPreferencesUtils.getString(getContext(), resourcesUtils.ID, null);
@@ -128,7 +100,6 @@ public class HomeFragment extends Fragment implements onChangePostState {
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e("fishCat", "getShare onFailure: " + e.getMessage());
             }
-
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {

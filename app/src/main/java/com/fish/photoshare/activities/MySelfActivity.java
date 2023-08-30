@@ -107,3 +107,4 @@ public class MySelfActivity extends AppCompatActivity {
             }
         });
     }
+}

@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.fish.photoshare.R;
+import com.fish.photoshare.activities.EntranceActivity;
 import com.fish.photoshare.activities.MySelfActivity;
 import com.fish.photoshare.activities.StarActivity;
 import com.fish.photoshare.activities.UnPublishedActivity;
@@ -62,12 +63,14 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         MaterialCardView starCard = rootView.findViewById(R.id.starCard);
         MaterialCardView unpublishedCard = rootView.findViewById(R.id.unpublishedCard);
         MaterialCardView publishCard = rootView.findViewById(R.id.publishedCard);
+        MaterialCardView signOut = rootView.findViewById(R.id.signOut);
         username = rootView.findViewById(R.id.tv_username);
         avatar = rootView.findViewById(R.id.ic_avatar);
         editCard.setOnClickListener(this);
         starCard.setOnClickListener(this);
         unpublishedCard.setOnClickListener(this);
         publishCard.setOnClickListener(this);
+        signOut.setOnClickListener(this);
     }
     private void dataHandler() {
         // 初始化从本地获取并通过校验得到的数据
@@ -110,9 +113,13 @@ public class UserFragment extends Fragment implements View.OnClickListener {
             Intent intent = new Intent(getActivity(), UnPublishedActivity.class);
             startActivity(intent);
         } else if (id == R.id.publishedCard) {
-            // 以及发布的帖子
+            // 发布的帖子
             Intent intent = new Intent(getActivity(), MySelfActivity.class);
             startActivity(intent);
+        } else if (id == R.id.signOut) {
+            Intent intent = new Intent(getActivity(), EntranceActivity.class);
+            startActivity(intent);
+            getActivity().finish();
         }
     }
 }

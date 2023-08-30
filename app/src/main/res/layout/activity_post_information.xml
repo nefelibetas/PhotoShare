@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray"
     tools:context=".activities.PostInformationActivity">
+
     <include
         android:id="@+id/header"
         layout="@layout/title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/PostMain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header">
+
         <TextView
             android:id="@+id/PostTitle"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:paddingStart="5dp"
+            android:padding="5dp"
             android:gravity="start|center"
             android:text="标题"
             android:textStyle="bold"
@@ -33,6 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -40,6 +43,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/PostTitle" />
+
         <TextView
             android:id="@+id/PostContent"
             android:layout_width="match_parent"
@@ -47,11 +51,12 @@
             android:textSize="18dp"
             android:textStyle="normal"
             android:text="内容"
-            android:padding="4dp"
+            android:padding="10dp"
             android:gravity="start|center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/PostTitle" />
+
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -59,8 +64,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/PostContent" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/PostImages"
+            android:padding="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -68,34 +75,46 @@
             app:layout_constraintTop_toBottomOf="@+id/PostContent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/PostComment"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/postLayoutBottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PostMain" />
-    
+        app:layout_constraintTop_toBottomOf="@+id/PostMain">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/PostComment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/postLayoutBottom"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
         <EditText
             android:id="@+id/PostCommentInput"
             android:layout_width="0dp"
             android:layout_height="45dp"
-            android:inputType="text"
-            app:layout_constraintWidth_percent="0.8"
             android:gravity="center_vertical"
             android:hint="评论"
+            android:inputType="text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/PostBottomButton"
