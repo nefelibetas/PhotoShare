@@ -155,6 +155,36 @@ public void onChangePostState(int position) {
 
 `HomeAdapter`内容看代码，没什么好说
 
+##### PostInformationActivity
+
+帖子详情页
+
+可以从`HomeFragment`、`收藏页`、`发布页`、`保存页`跳转过来
+
+这里布局逻辑较为复杂，首先帖子主题内容的图片需要`RecycleView`渲染，使用`ImageAdapter`。
+
+往下有评论区，分为一级评论和二级评论，一级评论需要动态生成，二级评论页需要动态生成，所以布局就为使用一个`RecycleView`来渲染一级评论，然后这个`RecycleView`的布局中再包裹一个`RecycleView`渲染二级评论。
+
+以上逻辑见`setRecyclerList()`（100行）
+
+~~~java
+// 两个变量，一个判断跳转来源从而决定是否显示评论区和评论输入
+// 另一个判断是否是第一次渲染
+private String from = null;
+private boolean isInit = false;
+// 第一次渲染见：82行
+initView(); // 全部渲染
+// 第二次渲染见：84行
+commentAdapter.setDetails(commentRecord.getRecords()); // 仅更新数据，部分渲染
+~~~
+
+在`PostInformationActivity`中处理一级评论的内容，然后在一级适配器(`PostCommentAdapter`)中，处理二级评论的内容，二级评论适配器(`SecondCommentAdapter`)只负责渲染二级评论。
+
+这里有个比较关键的地方：
+
+* 和渲染位置绑定的适配器和对应跳转内容都需要放到`ViewHolder`(也可以不叫这个名字，但一定是继承了`RecyclerView.ViewHolder`的类)，否则会出现点击事件绑定错误
+  * 原因在于在外部的变量不会关联实时position，只能拿到最后一次调用获取位置方法时的位置(可以理解为只能拿到渲染列表数组最后一个下标位置)。
+
 ---
 
 #### PublishFragment
