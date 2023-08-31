@@ -46,27 +46,23 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private PostRecord records;
     private final ResourcesUtils resourcesUtils;
     public final onChangePostState listener;
-
     public HomeAdapter(Context Context, PostRecord records, onChangePostState listener) {
         this.context = Context;
         this.records = records;
         this.listener = listener;
         this.resourcesUtils = new ResourcesUtils(context);
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_home_item, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PostDetail detail = records.getRecordDetail().get(position);
         initView(holder, detail, position);
     }
-
     protected void initView(ViewHolder holder, PostDetail detail, int position) {
         holder.userNameText.setText(detail.getUsername());
         holder.TitleText.setText(detail.getTitle());

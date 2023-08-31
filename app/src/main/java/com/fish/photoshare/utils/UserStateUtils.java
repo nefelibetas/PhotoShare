@@ -42,12 +42,7 @@ public class UserStateUtils {
                     // 没有成功登陆
                     if (result.getCode() != 200) {
                         Handler handler = new Handler(Looper.getMainLooper());
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                ToastUtils.show(context, result.getMsg());
-                            }
-                        });
+                        handler.post(() -> ToastUtils.show(context, result.getMsg()));
                         userRequestHandler.onFailure();
                     } else {
                         String id = result.getData().getId();

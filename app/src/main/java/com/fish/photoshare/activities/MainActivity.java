@@ -20,7 +20,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements RequestHandler {
     private ResourcesUtils resourcesUtils;
-    private BottomNavigationView mNavigationView;
     private FragmentManager manager;
     private HomeFragment homeFragment;
     private UserFragment userFragment;
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements RequestHandler {
         initNavigation();
     }
     private void initNavigation() {
-        mNavigationView = findViewById(R.id.navigation_bottom);
+        BottomNavigationView mNavigationView = findViewById(R.id.navigation_bottom);
         mNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.menu_home) {

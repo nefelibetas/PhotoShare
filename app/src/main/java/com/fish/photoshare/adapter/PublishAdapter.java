@@ -23,7 +23,6 @@ public class PublishAdapter extends RecyclerView.Adapter<PublishAdapter.ViewHold
     private Context context;
     private ArrayList<File> fileList;
     private ArrayList<Uri> uriList;
-    public PublishAdapter() {}
     public PublishAdapter(Context mContext, ArrayList<File> files) {
         context = mContext;
         fileList = files;

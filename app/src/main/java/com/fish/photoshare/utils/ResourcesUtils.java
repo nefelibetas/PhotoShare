@@ -13,10 +13,7 @@ public class ResourcesUtils {
     public String AVATAR;
     public String CREATE_TIME;
     public String LAST_UPDATE_TIME;
-    private Context context;
-    public ResourcesUtils() {}
-    public ResourcesUtils(Context mContext) {
-        context = mContext;
+    public ResourcesUtils(Context context) {
         ID = context.getResources().getString(R.string.user_id);
         PASSWORD = context.getResources().getString(R.string.user_password);
         USERNAME = context.getResources().getString(R.string.user_name);

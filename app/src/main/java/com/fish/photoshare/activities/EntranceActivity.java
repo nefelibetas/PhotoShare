@@ -115,6 +115,14 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
                             SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.LAST_UPDATE_TIME, user.getLastUpdateTime().toString());
                         } else {
                             SharedPreferencesUtils.clear(EntranceActivity.this);
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.ID, user.getId());
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.USERNAME, username);
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.PASSWORD, "");
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.SEX, user.getSex());
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.AVATAR, user.getAvatar());
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.INTRODUCE, user.getIntroduce());
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.CREATE_TIME, user.getCreateTime().toString());
+                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.LAST_UPDATE_TIME, user.getLastUpdateTime().toString());
                         }
                         startActivity(intent);
                         finish();

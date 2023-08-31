@@ -21,18 +21,19 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-public class HttpUtils <T> {
+public class HttpUtils<T> {
     public static final String APPID = "d4be705c704c434c868938cc000d5d61";
     private static final String APPSECRET = "489343d4c32945471492e945cdfe9833caf7f";
     private static final int TIMEOUT = 120;
-    private static MediaType MEDIA_TYPE_JSON;
-    private static MediaType MEDIA_TYPE_FORM_DATA;
-    private static OkHttpClient client;
-    private static Headers GeneralHeaders;
-    private static Headers JsonHeaders;
-    private static Headers FormHeaders;
+    private static final MediaType MEDIA_TYPE_JSON;
+    private static final MediaType MEDIA_TYPE_FORM_DATA;
+    private static final OkHttpClient client;
+    private static final Headers GeneralHeaders;
+    private static final Headers JsonHeaders;
+    private static final Headers FormHeaders;
     public static Gson gson;
     public static Type resultType;
+
     static {
         client = new OkHttpClient.Builder()
                 .readTimeout(TIMEOUT, TimeUnit.SECONDS)
