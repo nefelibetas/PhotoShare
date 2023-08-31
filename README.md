@@ -1,6 +1,6 @@
 # PhotoShare
 
-![PhotoShare-导出 (1)](D:\Code\Android\PhotoShare\PhotoShare-导出 (1).png)
+![PhotoShare-导出 (1)](README.assets/PhotoShare-导出 (1).png)
 
 ----
 
