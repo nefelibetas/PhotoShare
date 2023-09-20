@@ -89,8 +89,6 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    // 将账密传到主页面，会在UserFragment渲染
-                    Bundle bundle = new Bundle();
                     // 获取响应体内的数据，转化成字符串再转化成指定类型的数据
                     String body = response.body().string();
                     Result<User> result = HttpUtils.gson.fromJson(body, new TypeToken<Result<User>>(){}.getType());
@@ -143,11 +141,13 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     Log.d("fishCat", "register onFailure: " + e.getMessage());
                 }
+
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()) {
                         String body = response.body().string();
-                        Result<Object> res = HttpUtils.gson.fromJson(body, new TypeToken<Result<Object>>(){}.getType());
+                        Result<Object> res = HttpUtils.gson.fromJson(body, new TypeToken<Result<Object>>() {
+                        }.getType());
                         Log.d("fishCat", "register onResponse data: " + res);
                         if (res.getCode() != 200) {
                             new Handler(Looper.getMainLooper()).post(() -> ToastUtils.show(EntranceActivity.this, res.getMsg()));
@@ -156,6 +156,10 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
                         }
                     }
                 }
+            });
+        } else {
+            runOnUiThread(() -> {
+                ToastUtils.show(EntranceActivity.this, "密码长度为8到20位,必须包含字母和数字，字母区分大小写");
             });
         }
     }
