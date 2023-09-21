@@ -31,8 +31,6 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     private ShapeableImageView avatar;
     public static UserFragment newInstance() {
         UserFragment fragment = new UserFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
     public UserFragment() {}
@@ -84,13 +82,12 @@ public class UserFragment extends Fragment implements View.OnClickListener {
                 avatar.setImageResource(R.drawable.ic_launcher_background);
             } else {
                 Uri networkImageUri = Uri.parse(ava);
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    Glide.with(getActivity())
-                            .load(networkImageUri)
-                            .override(125, 125)
-                            .centerCrop()
-                            .into(avatar);
-                });
+                new Handler(Looper.getMainLooper()).post(() ->
+                        Glide.with(getActivity())
+                                .load(networkImageUri)
+                                .override(125, 125)
+                                .centerCrop()
+                                .into(avatar));
             }
         }
     }

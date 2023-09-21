@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import com.fish.photoshare.pojo.User;
 
 public class SharedPreferencesUtils {
-
     private static final String PREFERENCES_NAME = "sp_user_information";
     private static ResourcesUtils resourcesUtils;
     // 保存字符串
@@ -17,7 +16,6 @@ public class SharedPreferencesUtils {
         editor.putString(key, value);
         editor.apply();
     }
-
     // 获取字符串
     public static String getString(Context context, String key, String defaultValue) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);

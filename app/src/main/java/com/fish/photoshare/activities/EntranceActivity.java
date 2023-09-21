@@ -101,32 +101,20 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
                         // 获取到的数据没有异常就可以跳转到主界面，然后传递数据
                         Intent intent = new Intent(EntranceActivity.this, MainActivity.class);
                         User user = result.getData();
-                        // 登陆后保存登陆状态，有修改再获取数据
+                        SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.ID, user.getId());
+                        SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.USERNAME, username);
+                        SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.PASSWORD, "");
+                        SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.SEX, user.getSex());
+                        SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.AVATAR, user.getAvatar());
+                        SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.INTRODUCE, user.getIntroduce());
+                        SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.CREATE_TIME, user.getCreateTime().toString());
+                        SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.LAST_UPDATE_TIME, user.getLastUpdateTime().toString());
                         if (entranceModel.rememberPassword.isChecked()) {
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.ID, user.getId());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.USERNAME, username);
                             SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.PASSWORD, password);
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.SEX, user.getSex());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.AVATAR, user.getAvatar());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.INTRODUCE, user.getIntroduce());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.CREATE_TIME, user.getCreateTime().toString());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.LAST_UPDATE_TIME, user.getLastUpdateTime().toString());
-                        } else {
-                            SharedPreferencesUtils.clear(EntranceActivity.this);
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.ID, user.getId());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.USERNAME, username);
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.PASSWORD, "");
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.SEX, user.getSex());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.AVATAR, user.getAvatar());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.INTRODUCE, user.getIntroduce());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.CREATE_TIME, user.getCreateTime().toString());
-                            SharedPreferencesUtils.saveString(EntranceActivity.this, resourcesUtils.LAST_UPDATE_TIME, user.getLastUpdateTime().toString());
                         }
                         startActivity(intent);
                         finish();
                     }
-                } else {
-                    Log.d("fishCat", "signInHandler onResponse: 出现问题");
                 }
             }
         });

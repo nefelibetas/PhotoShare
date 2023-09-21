@@ -40,10 +40,7 @@ public class HomeFragment extends Fragment implements onChangePostState {
     }
 
     public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        return new HomeFragment();
     }
     public void initView(View rootView) {
         HomeRecyclerList = rootView.findViewById(R.id.recyclerListHome);

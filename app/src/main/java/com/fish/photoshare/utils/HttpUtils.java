@@ -33,7 +33,6 @@ public class HttpUtils<T> {
     private static final Headers FormHeaders;
     public static Gson gson;
     public static Type resultType;
-
     static {
         client = new OkHttpClient.Builder()
                 .readTimeout(TIMEOUT, TimeUnit.SECONDS)
