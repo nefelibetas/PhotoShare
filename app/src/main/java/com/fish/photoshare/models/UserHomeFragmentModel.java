@@ -70,7 +70,6 @@ public class UserHomeFragmentModel implements Serializable {
     private Handler handler;
     private Context context;
     private int chooseSex;
-    public UserHomeFragmentModel() {}
     public UserHomeFragmentModel(Context mContext) {
         this.context = mContext;
     }

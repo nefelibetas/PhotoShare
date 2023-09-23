@@ -174,11 +174,12 @@ public class UserInformationActivity extends AppCompatActivity implements Galler
         // 这里拿到网络Uri
         Uri networkImageUri = Uri.parse(avatarUrl);
         // 通过模拟主线程来修改UI
-        new Handler(Looper.getMainLooper()).post(() -> Glide.with(UserInformationActivity.this)
-                .load(networkImageUri)
-                .override(80, 80)
-                .centerCrop()
-                .into(user_avatar));
+        new Handler(Looper.getMainLooper()).post(() ->
+                Glide.with(UserInformationActivity.this)
+                        .load(networkImageUri)
+                        .override(80, 80)
+                        .centerCrop()
+                        .into(user_avatar));
     }
     public Uri createImageUri(Context context) {
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmm", Locale.getDefault()).format(new Date());
