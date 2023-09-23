@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,7 +35,6 @@ public class UnPublishedActivity extends AppCompatActivity {
     private Callback deleteCallback;
     private ResourcesUtils resourcesUtils;
     private RecyclerView recyclerListUnPublished;
-    private ImageView back;
     private UnPublishedAdapter unPublishedAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +48,12 @@ public class UnPublishedActivity extends AppCompatActivity {
         resourcesUtils = new ResourcesUtils(UnPublishedActivity.this);
         recyclerListUnPublished = findViewById(R.id.recyclerListUnPublished);
         recyclerListUnPublished.setLayoutManager(new LinearLayoutManager(UnPublishedActivity.this));
-        back = findViewById(R.id.icon_back);
+        ImageView back = findViewById(R.id.icon_back);
         back.setOnClickListener(v -> {
             finish();
         });
+        TextView title_text = findViewById(R.id.title_text);
+        title_text.setText("未发布稿件");
     }
     public void initCallback() {
         changeCallback = new Callback() {

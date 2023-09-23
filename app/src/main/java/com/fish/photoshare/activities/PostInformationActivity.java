@@ -153,6 +153,8 @@ public class PostInformationActivity extends AppCompatActivity {
         back.setOnClickListener(v -> {
             finish();
         });
+        TextView title_text = findViewById(R.id.title_text);
+        title_text.setText("帖子详情");
         setMain();
         setRecyclerList();
         commentHandler();

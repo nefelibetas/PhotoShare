@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,6 +48,8 @@ public class StarActivity extends AppCompatActivity {
         recyclerListStar.setLayoutManager(new LinearLayoutManager(StarActivity.this));
         starAdapter = null;
         ImageView back = findViewById(R.id.icon_back);
+        TextView title_text = findViewById(R.id.title_text);
+        title_text.setText("收藏帖子");
         back.setOnClickListener(v -> {
             finish();
         });

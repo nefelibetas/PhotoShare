@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,7 +35,7 @@ public class MySelfActivity extends AppCompatActivity {
     private Callback deleteCallback;
     private RecyclerView recyclerListMyself;
     private MyselfAdapter myselfAdapter;
-    private ImageView back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,10 +71,12 @@ public class MySelfActivity extends AppCompatActivity {
         resourcesUtils = new ResourcesUtils(MySelfActivity.this);
         recyclerListMyself = findViewById(R.id.recyclerListMyself);
         recyclerListMyself.setLayoutManager(new LinearLayoutManager(MySelfActivity.this));
-        back = findViewById(R.id.icon_back);
+        ImageView back = findViewById(R.id.icon_back);
         back.setOnClickListener(v -> {
             finish();
         });
+        TextView title_text = findViewById(R.id.title_text);
+        title_text.setText("我的帖子");
     }
     public void getData() {
         HashMap<String, String> params = new HashMap<>();

@@ -6,7 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:strokeWidth="0dp"
     android:orientation="vertical"
-    android:layout_marginTop="11dp"
+    android:layout_marginTop="3dp"
+    android:layout_marginBottom="8dp"
     android:clickable="true">
 
     <LinearLayout
@@ -21,17 +22,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/shapeableImageView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="@style/CircleImage" />
+
             <TextView
                 android:id="@+id/home_username_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:text="用户名"
                 android:textSize="21dp"
-                android:layout_marginLeft="10dp"
-                android:ellipsize="end"
                 android:textStyle="bold"
+                android:layout_marginStart="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.card.MaterialCardView
@@ -68,6 +79,7 @@
                 android:id="@+id/home_title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="5dp"
                 android:text="标题"
                 android:textSize="20dp"
                 android:textStyle="bold"

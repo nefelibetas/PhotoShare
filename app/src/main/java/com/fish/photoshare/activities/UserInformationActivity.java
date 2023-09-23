@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -52,6 +53,7 @@ public class UserInformationActivity extends AppCompatActivity implements Galler
     private ShapeableImageView user_avatar;
     // 返回按钮
     private ImageView iv_back;
+    private TextView title_text;
     // 从本地选取的图片Uri
     private Uri ImageUri;
     // 回调方法
@@ -78,6 +80,8 @@ public class UserInformationActivity extends AppCompatActivity implements Galler
         manager = getSupportFragmentManager();
         // 顶部返回按钮
         iv_back = findViewById(R.id.icon_back);
+        title_text = findViewById(R.id.title_text);
+        title_text.setText("用户中心");
         initOnclickListener();
     }
     public void initOnclickListener() {
